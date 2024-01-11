@@ -418,7 +418,6 @@ public List<Customer> LinqContains(List<int> ids, List<Customer> customers)
 }
 ```
 
-
 ## References
 
 Not every filter will have a link as I've picked up how to do some of these anyway, and some are just the inverse.
@@ -453,4 +452,4 @@ Not every filter will have a link as I've picked up how to do some of these anyw
 ## Notes
 
 - A `List` datatype is used for the collections.
-- The `Customer` is a record.
+- The `Customer` is a `record` because early on I was using `ReturnValueValidator` to ensure everything was as expected as being a `record` allowed `ReturnValueValidator` to make the correct checks. However after moving to `ArgumentsSource` I was no longer able to use `ReturnValueValidator` but kept it as a `record`. After checking with _Simple shuffled case - large_ with `Customer` as a `class` there seems to be no difference in performance.
