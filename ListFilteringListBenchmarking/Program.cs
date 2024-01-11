@@ -1,9 +1,12 @@
 ﻿using BenchmarkDotNet.Running;
-using ListFilteringListBenchmarking;
 
-//BenchmarkRunner.Run<InclusiveFilterBenchmarks>();
+
 
 BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
+
+//var g = new ExclusiveFilterBenchmarks().RemoveAllAny();
+//var f = new ExclusiveFilterBenchmarks().RemoveAllContains();
+
 //var results = new List<List<Customer>>
 //{
 //    new InclusiveFilterBenchmarks().ForEach(),

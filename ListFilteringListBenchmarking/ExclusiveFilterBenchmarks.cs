@@ -1,103 +1,128 @@
 ﻿using BenchmarkDotNet.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ListFilteringListBenchmarking
 {
     [MemoryDiagnoser]
-    [ReturnValueValidator(failOnError: true)]
     public class ExclusiveFilterBenchmarks
     {
-        private List<int> _ids;
-        private List<Customer> _customers;
-
-#if DEBUG
-        public ExclusiveFilterBenchmarks()
+        [Benchmark]
+        [ArgumentsSource(nameof(Data))]
+        public List<Customer> LinqExceptBy(List<int> ids, List<Customer> customers)
         {
-            Setup();
-        }
-#endif
-
-        [GlobalSetup]
-        public void Setup()
-        {
-            _ids = Enumerable.Range(1, 100).Select(x => x).ToList();
-            _customers = Enumerable.Range(1, 1000).Select(x => new Customer { Id = x }).ToList();
+            return customers.ExceptBy(ids.Select(x => x), c => c.Id).ToList();
         }
 
-        [IterationSetup(Targets = [nameof(ForRemoveAt), nameof(RemoveAll), nameof(BinarySearch)])]
-        public void SetupMutativeBenchmarks() => Setup();
+        [Benchmark]
+        [ArgumentsSource(nameof(Data))]
+        public List<Customer> RemoveAllAny(List<int> ids, List<Customer> customers)
+        {
+            customers.RemoveAll(c => ids.Any(i => i == c.Id));
+            return customers;
+        }
+
 
         [Benchmark(Baseline = true)]
-        public List<Customer> ForRemoveAt()
+        [ArgumentsSource(nameof(Data))]
+        public List<Customer> RemoveAllContains(List<int> ids, List<Customer> customers)
         {
-            for (int i = _customers.Count - 1; i >= 0; i--)
+            customers.RemoveAll(c => ids.Contains(c.Id));
+            return customers;
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(Data))]
+        public List<Customer> LinqAny(List<int> ids, List<Customer> customers)
+        {
+            return customers.Where(customer => !ids.Any(id => customer.Id == id)).ToList();
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(Data))]
+        public List<Customer> LinqContains(List<int> ids, List<Customer> customers)
+        {
+            return customers.Where(c => !ids.Contains(c.Id)).ToList();
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(Data))]
+        public List<Customer> LinqFindAllContains(List<int> ids, List<Customer> customers)
+        {
+            return customers.FindAll(c => !ids.Contains(c.Id));
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(Data))]
+        public List<Customer> LinqFindAllAny(List<int> ids, List<Customer> customers)
+        {
+            return customers.FindAll(c => !ids.Any(i => i == c.Id));
+        }
+
+
+        [Benchmark]
+        [ArgumentsSource(nameof(Data))]
+        public List<Customer> HashSetLinq(List<int> ids, List<Customer> customers)
+        {
+            var idSet = new HashSet<int>(ids);
+            return customers.Where(c => !idSet.Contains(c.Id)).ToList();
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(Data))]
+        public List<Customer> BinarySearch(List<int> ids, List<Customer> customers)
+        {
+            ids.Sort();
+            customers.RemoveAll(c => ids.BinarySearch(c.Id) >= 0);
+
+            return customers;
+        }
+
+        public IEnumerable<object[]> Data()
+        {
+            // Simple case - small
+            //yield return new object[] { Enumerable.Range(1, 100).Select(x => x).ToList(), Enumerable.Range(1, 1000).Select(x => new Customer { Id = x }).ToList() };
+
+            // Simple case - medium
+            //yield return new object[] { Enumerable.Range(1, 1000).Select(x => x).ToList(), Enumerable.Range(1, 10000).Select(x => new Customer { Id = x }).ToList() };
+
+            //// Simple case - large
+            //yield return new object[] { Enumerable.Range(1, 10000).Select(x => x).ToList(), Enumerable.Range(1, 100000).Select(x => new Customer { Id = x }).ToList() };
+
+            // Larger IDs case - small
+            //yield return new object[] { Enumerable.Range(1, 1000).Select(x => x).ToList(), Enumerable.Range(1, 100).Select(x => new Customer { Id = x }).ToList() };
+
+            //// Larger IDs case - medium
+            //yield return new object[] { Enumerable.Range(1, 10000).Select(x => x).ToList(), Enumerable.Range(1, 1000).Select(x => new Customer { Id = x }).ToList() };
+
+            //// Larger IDs case - large
+            //yield return new object[] { Enumerable.Range(1, 100000).Select(x => x).ToList(), Enumerable.Range(1, 10000).Select(x => new Customer { Id = x }).ToList() };
+
+            //// Simple shuffled case - small
+            //yield return new object[] { Shuffle(Enumerable.Range(1, 100).Select(x => x).ToList(), 69420), Shuffle(Enumerable.Range(1, 1000).Select(x => new Customer { Id = x }).ToList(), 69420) };
+
+            //// Simple shuffled case - medium
+            //yield return new object[] { Shuffle(Enumerable.Range(1, 1000).Select(x => x).ToList(), 69420), Shuffle(Enumerable.Range(1, 10000).Select(x => new Customer { Id = x }).ToList(), 69420) };
+
+            //// Simple shuffled case - large
+            yield return new object[] { Shuffle(Enumerable.Range(1, 10000).Select(x => x).ToList(), 69420), Shuffle(Enumerable.Range(1, 100000).Select(x => new Customer { Id = x }).ToList(), 69420) };
+        }
+
+        // https://stackoverflow.com/a/42980187
+        // Modified terribly to fit case
+        private List<T> Shuffle<T>(IList<T> list, int seed)
+        {
+            var rng = new Random(seed);
+            int n = list.Count;
+
+            while (n > 1)
             {
-                if (_ids.Contains(_customers[i].Id))
-                {
-                    _customers.RemoveAt(i);
-                }
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
             }
 
-            return _customers;
-        }
-
-        [Benchmark]
-        public List<Customer> LinqExceptBy()
-        {
-            return _customers.ExceptBy(_ids.Select(x => x), c => c.Id).ToList();
-        }
-
-        [Benchmark]
-        public List<Customer> RemoveAll()
-        {
-            _customers.RemoveAll(c => _ids.Any(i => i == c.Id));
-            return _customers;
-        }       
-
-
-        [Benchmark]
-        public List<Customer> LinqAny()
-        {
-            return _customers.Where(customer => !_ids.Any(id => customer.Id == id)).ToList();
-        }
-
-        [Benchmark]
-        public List<Customer> LinqContains()
-        {
-            return _customers.Where(c => !_ids.Contains(c.Id)).ToList();
-        }
-
-        [Benchmark]
-        public List<Customer> LinqFindAllContains()
-        {
-            return _customers.FindAll(c => !_ids.Contains(c.Id));
-        }
-
-        [Benchmark]
-        public List<Customer> LinqFindAllAny()
-        {
-            return _customers.FindAll(c => !_ids.Any(i => i == c.Id));
-        }
-
-
-        [Benchmark]
-        public List<Customer> HashSetLinq()
-        {
-            var idSet = new HashSet<int>(_ids);
-            return _customers.Where(c => !idSet.Contains(c.Id)).ToList();
-        }
-
-        [Benchmark]
-        public List<Customer> BinarySearch()
-        {
-            _ids.Sort();
-            _customers.RemoveAll(c => _ids.BinarySearch(c.Id) >= 0);
-
-            return _customers;
+            return list.ToList();
         }
     }
 }

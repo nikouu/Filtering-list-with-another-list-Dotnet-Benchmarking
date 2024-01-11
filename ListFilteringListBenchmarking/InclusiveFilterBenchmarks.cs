@@ -3,33 +3,17 @@
 namespace ListFilteringListBenchmarking
 {
     [MemoryDiagnoser]
-    [ReturnValueValidator(failOnError: true)]
+    //[ReturnValueValidator(failOnError: true)]
     public class InclusiveFilterBenchmarks
     {
-        private List<int> _ids;
-        private List<Customer> _customers;
-
-#if DEBUG
-        public InclusiveFilterBenchmarks()
-        {
-            Setup();
-        }
-#endif
-
-        [GlobalSetup]
-        public void Setup()
-        {
-            _ids = Enumerable.Range(1, 100).Select(x => x).ToList();
-            _customers = Enumerable.Range(1, 1000).Select(x => new Customer { Id = x }).ToList();
-        }
-
-        [Benchmark(Baseline = true)]
-        public List<Customer> ForEach()
+        [Benchmark]
+        [ArgumentsSource(nameof(Data))]
+        public List<Customer> ForEach(List<int> ids, List<Customer> customers)
         {
             var returnList = new List<Customer>();
-            foreach (var customer in _customers)
+            foreach (var customer in customers)
             {
-                foreach (var id in _ids)
+                foreach (var id in ids)
                 {
                     if (customer.Id == id)
                     {
@@ -42,50 +26,113 @@ namespace ListFilteringListBenchmarking
         }
 
         [Benchmark]
-        public List<Customer> LinqAny()
+        [ArgumentsSource(nameof(Data))]
+
+        public List<Customer> LinqAny(List<int> ids, List<Customer> customers)
         {
-            return _customers.Where(customer => _ids.Any(id => customer.Id == id)).ToList();
+            return customers.Where(customer => ids.Any(id => customer.Id == id)).ToList();
+        }
+
+        // Baseline on a common one I see
+        [Benchmark(Baseline = true)]
+        [ArgumentsSource(nameof(Data))]
+
+        public List<Customer> LinqContains(List<int> ids, List<Customer> customers)
+        {
+            return customers.Where(c => ids.Contains(c.Id)).ToList();
         }
 
         [Benchmark]
-        public List<Customer> LinqContains()
-        {
-            return _customers.Where(c => _ids.Contains(c.Id)).ToList();
-        }
+        [ArgumentsSource(nameof(Data))]
 
-        [Benchmark]
-        public List<Customer> LinqJoin()
+        public List<Customer> LinqJoin(List<int> ids, List<Customer> customers)
         {
-            return (from c in _customers
-                    join i in _ids on c.Id equals i
+            return (from c in customers
+                    join i in ids on c.Id equals i
                     select c).ToList();
         }
 
         [Benchmark]
-        public List<Customer> LinqFindAllContains()
+        [ArgumentsSource(nameof(Data))]
+        public List<Customer> LinqFindAllContains(List<int> ids, List<Customer> customers)
         {
-            return _customers.FindAll(c => _ids.Contains(c.Id));
-        }
-
-
-        [Benchmark]
-        public List<Customer> LinqFindAllAny()
-        {
-            return _customers.FindAll(c => _ids.Any(i => i == c.Id));
+            return customers.FindAll(c => ids.Contains(c.Id));
         }
 
         [Benchmark]
-        public List<Customer> HashSetLinq()
+        [ArgumentsSource(nameof(Data))]
+
+        public List<Customer> LinqFindAllAny(List<int> ids, List<Customer> customers)
         {
-            var idSet = new HashSet<int>(_ids);
-            return _customers.Where(c => idSet.Contains(c.Id)).ToList();
+            return customers.FindAll(c => ids.Any(i => i == c.Id));
         }
 
         [Benchmark]
-        public List<Customer> BinarySearch()
+        [ArgumentsSource(nameof(Data))]
+
+        public List<Customer> HashSetLinq(List<int> ids, List<Customer> customers)
         {
-            _ids.Sort();
-            return _customers.Where(c => _ids.BinarySearch(c.Id) >= 0).ToList();
+            var idSet = new HashSet<int>(ids);
+            return customers.Where(c => idSet.Contains(c.Id)).ToList();
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(Data))]
+
+        public List<Customer> BinarySearch(List<int> ids, List<Customer> customers)
+        {
+            ids.Sort();
+            return customers.Where(c => ids.BinarySearch(c.Id) >= 0).ToList();
+        }
+
+        // https://mawosoft.github.io/BenchmarkDotNet/articles/features/parameterization.html#sample-introarrayparam
+        public IEnumerable<object[]> Data()
+        {
+            // Simple case - small
+            //yield return new object[] { Enumerable.Range(1, 100).Select(x => x).ToList(), Enumerable.Range(1, 1000).Select(x => new Customer { Id = x }).ToList() };
+
+            // Simple case - medium
+            //yield return new object[] { Enumerable.Range(1, 1000).Select(x => x).ToList(), Enumerable.Range(1, 10000).Select(x => new Customer { Id = x }).ToList() };
+
+            //// Simple case - large
+            //yield return new object[] { Enumerable.Range(1, 10000).Select(x => x).ToList(), Enumerable.Range(1, 100000).Select(x => new Customer { Id = x }).ToList() };
+
+            // Larger IDs case - small
+            //yield return new object[] { Enumerable.Range(1, 1000).Select(x => x).ToList(), Enumerable.Range(1, 100).Select(x => new Customer { Id = x }).ToList() };
+
+            //// Larger IDs case - medium
+            //yield return new object[] { Enumerable.Range(1, 10000).Select(x => x).ToList(), Enumerable.Range(1, 1000).Select(x => new Customer { Id = x }).ToList() };
+
+            //// Larger IDs case - large
+            //yield return new object[] { Enumerable.Range(1, 100000).Select(x => x).ToList(), Enumerable.Range(1, 10000).Select(x => new Customer { Id = x }).ToList() };
+
+            //// Simple shuffled case - small
+            //yield return new object[] { Shuffle(Enumerable.Range(1, 100).Select(x => x).ToList(), 69420), Shuffle(Enumerable.Range(1, 1000).Select(x => new Customer { Id = x }).ToList(), 69420) };
+
+            //// Simple shuffled case - medium
+            //yield return new object[] { Shuffle(Enumerable.Range(1, 1000).Select(x => x).ToList(), 69420), Shuffle(Enumerable.Range(1, 10000).Select(x => new Customer { Id = x }).ToList(), 69420) };
+
+            //// Simple shuffled case - large
+            yield return new object[] { Shuffle(Enumerable.Range(1, 10000).Select(x => x).ToList(), 69420), Shuffle(Enumerable.Range(1, 100000).Select(x => new Customer { Id = x }).ToList(), 69420) };
+        }
+
+        // https://stackoverflow.com/a/42980187
+        // Modified terribly to fit case
+        private List<T> Shuffle<T>(IList<T> list, int seed)
+        {
+            var rng = new Random(seed);
+            int n = list.Count;
+
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+
+            return list.ToList();
         }
     }   
 }
