@@ -101,6 +101,8 @@ Full results in [InclusiveFilterBenchmarks.md](data/InclusiveFilterBenchmarks.md
 1. The ID list being bigger than the customer list
 1. Shuffed data
 
+Code found in [InclusiveFilterBenchmarks.cs](/ListFilteringListBenchmarking/InclusiveFilterBenchmarks.cs).
+
 The following are some results for interest. There is an analysis below this Results section.
 
 #### Simple case - small
@@ -129,7 +131,7 @@ The following are some results for interest. There is an analysis below this Res
 | HashSetLinq         | 10000 | 100000    |       903.1 us |     15.98 us |     13.35 us |       898.6 us |  0.009 |    0.00 |   79.1016 |  79.1016 | 79.1016 |    414.5 KB |        1.62 |
 | BinarySearch        | 10000 | 100000    |     2,294.1 us |     45.81 us |    103.39 us |     2,256.0 us |  0.022 |    0.00 |   39.0625 |  39.0625 | 39.0625 |   256.48 KB |        1.00 |
 
-## Larger IDs case - large
+#### Larger IDs case - large
 | Method              | ids    | customers |         Mean |        Error |       StdDev |       Median |  Ratio | RatioSD |      Gen0 |      Gen1 |     Gen2 |  Allocated | Alloc Ratio |
 | ------------------- | ------ | --------- | -----------: | -----------: | -----------: | -----------: | -----: | ------: | --------: | --------: | -------: | ---------: | ----------: |
 | ForEach             | 100000 | 10000     | 725,059.6 us | 14,346.37 us | 13,419.60 us | 727,435.3 us | 168.03 |    4.66 |         - |         - |        - |   256.7 KB |        1.00 |
@@ -141,7 +143,7 @@ The following are some results for interest. There is an analysis below this Res
 | HashSetLinq         | 100000 | 10000     |     919.5 us |     20.48 us |     58.09 us |     895.9 us |   0.22 |    0.01 |  366.2109 |  333.0078 | 333.0078 | 1956.66 KB |        7.63 |
 | BinarySearch        | 100000 | 10000     |   1,127.8 us |     22.25 us |     38.97 us |   1,123.3 us |   0.26 |    0.01 |   41.0156 |   41.0156 |  41.0156 |  256.48 KB |        1.00 |
 
-## Simple shuffled case - large
+#### Simple shuffled case - large
 
 | Method              | ids   | customers |         Mean |      Error |     StdDev |       Median | Ratio | RatioSD |      Gen0 |     Gen1 |    Gen2 |   Allocated | Alloc Ratio |
 | ------------------- | ----- | --------- | -----------: | ---------: | ---------: | -----------: | ----: | ------: | --------: | -------: | ------: | ----------: | ----------: |
@@ -163,6 +165,9 @@ Full results in [ExclusiveFilterBenchmarks.md](data/ExclusiveFilterBenchmarks.md
 1. Shuffed data
 
 The following are some results for interest. There is an analysis below this Results section.
+
+
+Code found in [ExclusiveFilterBenchmarks.cs](/ListFilteringListBenchmarking/ExclusiveFilterBenchmarks.cs).
 
 #### Simple case - small
 
@@ -221,7 +226,8 @@ The following are some results for interest. There is an analysis below this Res
 | BinarySearch        | 10000 | 100000    |     2.492 ms |  0.0917 ms |  0.2630 ms |  0.02 |    0.00 |         - |         - |         - |       90 B |        0.54 |
 
 ```
-Size        : Value of the 'Size' parameter - the number of weather records returned per request
+ids         : The number of IDs 
+customers	: The number of customers
 Mean        : Arithmetic mean of all measurements
 Error       : Half of 99.9% confidence interval
 StdDev      : Standard deviation of all measurements
@@ -442,14 +448,10 @@ Not every filter will have a link as I've picked up how to do some of these anyw
 
 | Method              | Link                                                                                                               |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| ForEach             |                                                                                                                    |
 | LinqAny             | [link](https://stackoverflow.com/a/41929414)                                                                      |
 | LinqContains        | [link](https://stackoverflow.com/a/61484703)                                                                       |
 | LinqJoin            | [link](https://dotnetable.wordpress.com/2015/06/20/find-all-items-in-list-which-exist-in-another-list-using-linq/) |
-| LinqFindAllContains |                                                                                                                    |
-| LinqFindAllAny      | 213.987 μs                                                                                                         |
 | HashSetLinq         | [link](https://stackoverflow.com/a/32013973)                                                                       |
-| BinarySearch        |                                                                                                          |
 
 ### Exclusive filter
 
@@ -459,10 +461,7 @@ Not every filter will have a link as I've picked up how to do some of these anyw
 | LinqAny             | [link](https://stackoverflow.com/a/18977915)                                             |
 | LinqContains        | [link](https://stackoverflow.com/a/15540930)                                             |
 | LinqFindAllContains | [link](https://copyprogramming.com/howto/csharp-linq-filter-list-of-lists-code-example)] |
-| LinqFindAllAny      | 215.480 μs                                                                               |
-| HashSetLinq         |                                                                                          |
 | ForRemoveAt         | [link](https://stackoverflow.com/a/1582317)                                              |
-| RemoveAll           | 3,740.263 μs                                                                             |
 | BinarySearch        | [link](https://stackoverflow.com/a/15541014)                                             |
 
 ## Notes
