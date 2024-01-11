@@ -76,6 +76,13 @@ namespace ListFilteringListBenchmarking
             return customers;
         }
 
+        [Benchmark]
+        [ArgumentsSource(nameof(Data))]
+        public List<Customer> ExceptBy(List<int> ids, List<Customer> customers)
+        {
+            return customers.ExceptBy(ids, x => x.Id).ToList();
+        }
+
         public IEnumerable<object[]> Data()
         {
             // Simple case - small

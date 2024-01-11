@@ -124,3 +124,21 @@
 | LinqFindAllAny      | 10000 | 100000    | 1,843.463 ms | 28.9160 ms | 24.1462 ms | 17.51 |    0.33 | 3000.0000 |         - |         - | 14897688 B |   88,676.71 |
 | HashSetLinq         | 10000 | 100000    |     2.661 ms |  0.0523 ms |  0.1159 ms |  0.03 |    0.00 |  484.3750 |  445.3125 |  441.4063 |  2260480 B |   13,455.24 |
 | BinarySearch        | 10000 | 100000    |     2.492 ms |  0.0917 ms |  0.2630 ms |  0.02 |    0.00 |         - |         - |         - |       90 B |        0.54 |
+
+```
+ids         : The number of IDs 
+customers	: The number of customers
+Mean        : Arithmetic mean of all measurements
+Error       : Half of 99.9% confidence interval
+StdDev      : Standard deviation of all measurements
+Median      : Value separating the higher half of all measurements (50th percentile)
+Ratio       : Mean of the ratio distribution ([Current]/[Baseline])
+RatioSD     : Standard deviation of the ratio distribution ([Current]/[Baseline])
+Gen0        : GC Generation 0 collects per 1000 operations
+Gen1        : GC Generation 1 collects per 1000 operations
+Gen2        : GC Generation 2 collects per 1000 operations
+Allocated   : Allocated memory per single operation (managed only, inclusive, 1KB = 1024B)
+Alloc Ratio : Allocated memory ratio distribution ([Current]/[Baseline])
+1 μs        : 1 Microsecond (0.000001 sec)
+1 ms        : 1 Millisecond (0.001 sec)
+```
