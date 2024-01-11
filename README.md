@@ -1,4 +1,4 @@
-# Filtering-list-with-another-list-Dotnet-Benchmarking
+# Filtering list with another list Dotnet Benchmarking
 Benchmarking various ways to filter a list based on another list for both inclusive and exclusive cases. 
 
 ## How to run
@@ -70,6 +70,22 @@ Our result should be:
 Customer Id: 4
 Customer Id: 5
 ```
+
+### Dataset
+
+The methods are tested against 9 datasets:
+
+| Dataset                       | ID count | Customer count | Description                                                                               |
+| ----------------------------- | -------: | -------------: | ----------------------------------------------------------------------------------------- |
+| Simple case - small           |      100 |           1000 | A small volume of the case where there are less IDs than customers                        |
+| Simple case - medium          |     1000 |          10000 | A medium volume of the case where there are less IDs than customers                       |
+| Simple case - large           |    10000 |         100000 | A large volume of the case where there are less IDs than customers                        |
+| Larger IDs case - small       |     1000 |            100 | A small volume of the case where there are more IDs than customers                        |
+| Larger IDs case - medium      |    10000 |           1000 | A medium volume of the case where there are more IDs than customers                       |
+| Larger IDs case - large       |   100000 |          10000 | A large volume of the case where there are more IDs than customers                        |
+| Simple shuffled case - small  |      100 |           1000 | A small volume of the case where there are less IDs than customers but both are shuffled  |
+| Simple shuffled case - medium |     1000 |          10000 | A medium volume of the case where there are less IDs than customers but both are shuffled |
+| Simple shuffled case - large  |    10000 |         100000 | A large volume of the case where there are less IDs than customers but both are shuffled  |
 
 ### Other points
 - The `Customer` type is a `record` to help facilitate the easier result checking via the  `ReturnValueValidator` attribute due to the tidy way `record` types handle equality.
@@ -453,3 +469,4 @@ Not every filter will have a link as I've picked up how to do some of these anyw
 
 - A `List` datatype is used for the collections.
 - The `Customer` is a `record` because early on I was using `ReturnValueValidator` to ensure everything was as expected as being a `record` allowed `ReturnValueValidator` to make the correct checks. However after moving to `ArgumentsSource` I was no longer able to use `ReturnValueValidator` but kept it as a `record`. After checking with _Simple shuffled case - large_ with `Customer` as a `class` there seems to be no difference in performance.
+- The ids and customer columns in the benchmark tables have been edited. Due to how BenchmarkDotnet works, the representation of the datasets ended up being `Syste(...)nt32] [47]` and `Syste(...)omer] [73]` respectively.
