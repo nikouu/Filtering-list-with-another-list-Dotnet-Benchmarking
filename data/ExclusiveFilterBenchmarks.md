@@ -82,6 +82,7 @@ Intel Core i7-7700K CPU 4.20GHz (Kaby Lake), 1 CPU, 8 logical and 4 physical cor
 | FindAll_BinarySearch     | 10000 |      1000 |     3.401 ms |  0.0659 ms |  0.1205 ms |  0.03 |    0.00 |   39.0625 |  39.0625 | 39.0625 |   256.41 KB |        1.00 |
 
 ## Larger IDs case - large
+
 | Method                   |    ids | customers |         Mean |      Error |     StdDev | Ratio | RatioSD |      Gen0 |     Gen1 |    Gen2 |   Allocated | Alloc Ratio |
 | ------------------------ | -----: | --------: | -----------: | ---------: | ---------: | ----: | ------: | --------: | -------: | ------: | ----------: | ----------: |
 | ForEach                  | 100000 |     10000 |   720.873 ms | 13.8594 ms | 19.4290 ms |  6.55 |    0.21 |         - |        - |       - |    256.7 KB |        1.00 |
