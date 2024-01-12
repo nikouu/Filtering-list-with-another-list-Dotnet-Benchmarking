@@ -3,9 +3,11 @@ Benchmarking various ways to filter a list based on another list for both inclus
 
 ## How to run
 1. Get the repo
-1. In the same project as the solution run:
+1. Uncomment the data you want to use in the `Data()` function in either benchmark file
+1. In the same project as the solution run either:
 ```
-dotnet run --configuration Release --framework net8.0 --runtimes net8.0 --filter *
+dotnet run --configuration Release --framework net8.0 --runtimes net8.0 --filter *InclusiveFilterBenchmarks*
+dotnet run --configuration Release --framework net8.0 --runtimes net8.0 --filter *ExclusiveFilterBenchmarks*
 ```
 
 ## Test scenarios
@@ -43,6 +45,8 @@ Customer Id: 2
 Customer Id: 3
 ```
 
+The code for the inclusive benchmark scenarios can be found in [InclusiveFilterBenchmarks.cs](/ListFilteringListBenchmarking/InclusiveFilterBenchmarks.cs).
+
 ### Exclusive filter
 Where from the main list, we want only the values from not in filtering list. 
 
@@ -71,6 +75,8 @@ Customer Id: 4
 Customer Id: 5
 ```
 
+The code for the exclusive benchmark scenarios can be found in [ExclusiveFilterBenchmarks.cs](/ListFilteringListBenchmarking/ExclusiveFilterBenchmarks.cs).
+
 ### Dataset
 
 The methods are tested against 9 datasets:
@@ -94,25 +100,9 @@ The methods are tested against 9 datasets:
 
 Results are benchmarked against what I found to be one of the most common filtering methods.
 
-There is an analysis below this Results section.
-
-### Inclusive filter
-
-Full results in [InclusiveFilterBenchmarks.md](data/InclusiveFilterBenchmarks.md) including:
-1. Differing dataset sizes
-1. The ID list being bigger than the customer list
-1. Shuffed data
-
-Code found in [InclusiveFilterBenchmarks.cs](/ListFilteringListBenchmarking/InclusiveFilterBenchmarks.cs).
-
-### Exclusive filter
-
-Full results in [ExclusiveFilterBenchmarks.md](data/ExclusiveFilterBenchmarks.md) including:
-1. Differing dataset sizes
-1. The ID list being bigger than the customer list
-1. Shuffed data
-
-Code found in [ExclusiveFilterBenchmarks.cs](/ListFilteringListBenchmarking/ExclusiveFilterBenchmarks.cs).
+As the data is large, you can find the results in their own files:
+- [InclusiveFilterBenchmarks.md](data/InclusiveFilterBenchmarks.md)
+- [ExclusiveFilterBenchmarks.md](data/ExclusiveFilterBenchmarks.md)
 
 ## Analysis
 
@@ -208,11 +198,11 @@ public List<Customer> HashSet_FindAll_Contains(List<int> ids, List<Customer> cus
 
 #### Avoid using `.Any()` and Linq `join`
 
-`.Any()` is nearly always the worst performing and is entirely outclasses by using `.Contains()` inside the `Where()` predicate. Linq `join` sometimes does okay, but it's not worth it when easier, more performant and less unusual methods exist.
+`.Any()` is nearly always the worst performing and is entirely outclassed by using `.Contains()` inside the `Where()` predicate. Linq `join` sometimes does okay, but it's not worth it when easier, more performant and less unusual methods exist.
 
 ### Exclusive filter
 
-Taking the top two performers (and baseline, `RemoveAllContains`) for both speed and allocations in all categories. Some cases may have a more performant method but large allocations or vice versa:
+Taking the top two performers (and baseline, `Where_Contains`) for both speed and allocations in all categories. Some cases may have a more performant method but large allocations or vice versa:
 
 
 | Method                   | Dataset |       Mean | **Ratio** | Allocated | **Alloc Ratio** |
@@ -308,6 +298,10 @@ public List<Customer> RemoveAll_BinarySearch(List<int> ids, List<Customer> custo
     return customers;
 }
 ```
+
+#### Avoid using `.Any()` and Linq `join`
+
+`.Any()` is nearly always the worst performing and is entirely outclasses by using `.Contains()` inside the `Where()` predicate. Linq `join` sometimes does okay, but it's not worth it when easier, more performant and less unusual methods exist.
 
 ## References
 
