@@ -27,8 +27,7 @@ namespace ListFilteringListBenchmarking
 
         [Benchmark]
         [ArgumentsSource(nameof(Data))]
-
-        public List<Customer> LinqAny(List<int> ids, List<Customer> customers)
+        public List<Customer> Where_Any(List<int> ids, List<Customer> customers)
         {
             return customers.Where(customer => ids.Any(id => customer.Id == id)).ToList();
         }
@@ -36,16 +35,14 @@ namespace ListFilteringListBenchmarking
         // Baseline on a common one I see
         [Benchmark(Baseline = true)]
         [ArgumentsSource(nameof(Data))]
-
-        public List<Customer> LinqContains(List<int> ids, List<Customer> customers)
+        public List<Customer> Where_Contains(List<int> ids, List<Customer> customers)
         {
             return customers.Where(c => ids.Contains(c.Id)).ToList();
         }
 
         [Benchmark]
         [ArgumentsSource(nameof(Data))]
-
-        public List<Customer> LinqJoin(List<int> ids, List<Customer> customers)
+        public List<Customer> Join(List<int> ids, List<Customer> customers)
         {
             return (from c in customers
                     join i in ids on c.Id equals i
@@ -54,23 +51,21 @@ namespace ListFilteringListBenchmarking
 
         [Benchmark]
         [ArgumentsSource(nameof(Data))]
-        public List<Customer> LinqFindAllContains(List<int> ids, List<Customer> customers)
+        public List<Customer> FindAll_Contains(List<int> ids, List<Customer> customers)
         {
             return customers.FindAll(c => ids.Contains(c.Id));
         }
 
         [Benchmark]
         [ArgumentsSource(nameof(Data))]
-
-        public List<Customer> LinqFindAllAny(List<int> ids, List<Customer> customers)
+        public List<Customer> FindAll_Any(List<int> ids, List<Customer> customers)
         {
             return customers.FindAll(c => ids.Any(i => i == c.Id));
         }
 
         [Benchmark]
         [ArgumentsSource(nameof(Data))]
-
-        public List<Customer> HashSetLinq(List<int> ids, List<Customer> customers)
+        public List<Customer> HashSet_Where_Contains(List<int> ids, List<Customer> customers)
         {
             var idSet = new HashSet<int>(ids);
             return customers.Where(c => idSet.Contains(c.Id)).ToList();
@@ -78,11 +73,26 @@ namespace ListFilteringListBenchmarking
 
         [Benchmark]
         [ArgumentsSource(nameof(Data))]
+        public List<Customer> HashSet_FindAll_Contains(List<int> ids, List<Customer> customers)
+        {
+            var idSet = new HashSet<int>(ids);
+            return customers.FindAll(c => idSet.Contains(c.Id));
+        }
 
-        public List<Customer> BinarySearch(List<int> ids, List<Customer> customers)
+        [Benchmark]
+        [ArgumentsSource(nameof(Data))]
+        public List<Customer> Where_BinarySearch(List<int> ids, List<Customer> customers)
         {
             ids.Sort();
             return customers.Where(c => ids.BinarySearch(c.Id) >= 0).ToList();
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(Data))]
+        public List<Customer> FindAll_BinarySearch(List<int> ids, List<Customer> customers)
+        {
+            ids.Sort();
+            return customers.FindAll(c => ids.BinarySearch(c.Id) >= 0);
         }
 
         // https://mawosoft.github.io/BenchmarkDotNet/articles/features/parameterization.html#sample-introarrayparam

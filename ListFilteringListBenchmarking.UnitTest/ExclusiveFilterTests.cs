@@ -16,933 +16,6 @@ namespace ListFilteringListBenchmarking.UnitTest
         }
 
         [TestMethod]
-        public void LinqExceptBy_EmptyIds()
-        {
-            var ids = Enumerable.Empty<int>().ToList();
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqExceptBy(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void LinqExceptBy_EmptyCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.LinqExceptBy(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqExceptBy_EmptyIdsAndCustomers()
-        {
-            var ids = new List<int>();
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.LinqExceptBy(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqExceptBy_SmallerIdCount()
-        {
-            var ids = new List<int> { 1 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqExceptBy(ids, customers);
-
-            Assert.IsTrue(result.Count == 2);
-            Assert.IsTrue(result[0].Id == 2);
-            Assert.IsTrue(result[1].Id == 3);
-        }
-
-        [TestMethod]
-        public void LinqExceptBy_LargerIdCount()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqExceptBy(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqExceptBy_NoIdsMatchCustomers()
-        {
-            var ids = new List<int> { 4, 5, 6 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqExceptBy(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void LinqExceptBy_AllIdsMatchCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqExceptBy(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void RemoveAllAny_EmptyIds()
-        {
-            var ids = Enumerable.Empty<int>().ToList();
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.RemoveAllAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void RemoveAllAny_EmptyCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.RemoveAllAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void RemoveAllAny_EmptyIdsAndCustomers()
-        {
-            var ids = new List<int>();
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.RemoveAllAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void RemoveAllAny_SmallerIdCount()
-        {
-            var ids = new List<int> { 1 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.RemoveAllAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 2);
-            Assert.IsTrue(result[0].Id == 2);
-            Assert.IsTrue(result[1].Id == 3);
-        }
-
-        [TestMethod]
-        public void RemoveAllAny_LargerIdCount()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.RemoveAllAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void RemoveAllAny_NoIdsMatchCustomers()
-        {
-            var ids = new List<int> { 4, 5, 6 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.RemoveAllAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void RemoveAllAny_AllIdsMatchCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.RemoveAllAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void RemoveAllContains_EmptyIds()
-        {
-            var ids = Enumerable.Empty<int>().ToList();
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.RemoveAllContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void RemoveAllContains_EmptyCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.RemoveAllContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void RemoveAllContains_EmptyIdsAndCustomers()
-        {
-            var ids = new List<int>();
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.RemoveAllContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void RemoveAllContains_SmallerIdCount()
-        {
-            var ids = new List<int> { 1 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.RemoveAllContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 2);
-            Assert.IsTrue(result[0].Id == 2);
-            Assert.IsTrue(result[1].Id == 3);
-        }
-
-        [TestMethod]
-        public void RemoveAllContains_LargerIdCount()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.RemoveAllContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void RemoveAllContains_NoIdsMatchCustomers()
-        {
-            var ids = new List<int> { 4, 5, 6 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.RemoveAllContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void RemoveAllContains_AllIdsMatchCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.RemoveAllContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqAny_EmptyIds()
-        {
-            var ids = Enumerable.Empty<int>().ToList();
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void LinqAny_EmptyCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.LinqAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqAny_EmptyIdsAndCustomers()
-        {
-            var ids = new List<int>();
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.LinqAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqAny_SmallerIdCount()
-        {
-            var ids = new List<int> { 1 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 2);
-            Assert.IsTrue(result[0].Id == 2);
-            Assert.IsTrue(result[1].Id == 3);
-        }
-
-        [TestMethod]
-        public void LinqAny_LargerIdCount()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqAny_NoIdsMatchCustomers()
-        {
-            var ids = new List<int> { 4, 5, 6 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void LinqAny_AllIdsMatchCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqContains_EmptyIds()
-        {
-            var ids = Enumerable.Empty<int>().ToList();
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void LinqContains_EmptyCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.LinqContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqContains_EmptyIdsAndCustomers()
-        {
-            var ids = new List<int>();
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.LinqContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqContains_SmallerIdCount()
-        {
-            var ids = new List<int> { 1 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 2);
-            Assert.IsTrue(result[0].Id == 2);
-            Assert.IsTrue(result[1].Id == 3);
-        }
-
-        [TestMethod]
-        public void LinqContainsy_LargerIdCount()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqContains_NoIdsMatchCustomers()
-        {
-            var ids = new List<int> { 4, 5, 6 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void LinqContains_AllIdsMatchCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqFindAllContains_EmptyIds()
-        {
-            var ids = Enumerable.Empty<int>().ToList();
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqFindAllContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void LinqFindAllContains_EmptyCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.LinqFindAllContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqFindAllContains_EmptyIdsAndCustomers()
-        {
-            var ids = new List<int>();
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.LinqFindAllContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqFindAllContains_SmallerIdCount()
-        {
-            var ids = new List<int> { 1 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqFindAllContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 2);
-            Assert.IsTrue(result[0].Id == 2);
-            Assert.IsTrue(result[1].Id == 3);
-        }
-
-        [TestMethod]
-        public void LinqFindAllContains_LargerIdCount()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqFindAllContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqFindAllContains_NoIdsMatchCustomers()
-        {
-            var ids = new List<int> { 4, 5, 6 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqFindAllContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void LinqFindAllContains_AllIdsMatchCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqFindAllContains(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqFindAllAny_EmptyIds()
-        {
-            var ids = Enumerable.Empty<int>().ToList();
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqFindAllAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void LinqFindAllAny_EmptyCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.LinqFindAllAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqFindAllAny_EmptyIdsAndCustomers()
-        {
-            var ids = new List<int>();
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.LinqFindAllAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqFindAllAny_SmallerIdCount()
-        {
-            var ids = new List<int> { 1 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqFindAllAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 2);
-            Assert.IsTrue(result[0].Id == 2);
-            Assert.IsTrue(result[1].Id == 3);
-        }
-
-        [TestMethod]
-        public void LinqFindAllAny_LargerIdCount()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqFindAllAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void LinqFindAllAny_NoIdsMatchCustomers()
-        {
-            var ids = new List<int> { 4, 5, 6 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqFindAllAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void LinqFindAllAny_AllIdsMatchCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.LinqFindAllAny(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void HashSetLinq_EmptyIds()
-        {
-            var ids = Enumerable.Empty<int>().ToList();
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.HashSetLinq(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void HashSetLinq_EmptyCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.HashSetLinq(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void HashSetLinq_EmptyIdsAndCustomers()
-        {
-            var ids = new List<int>();
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.HashSetLinq(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void HashSetLinq_SmallerIdCount()
-        {
-            var ids = new List<int> { 1 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.HashSetLinq(ids, customers);
-
-            Assert.IsTrue(result.Count == 2);
-            Assert.IsTrue(result[0].Id == 2);
-            Assert.IsTrue(result[1].Id == 3);
-        }
-
-        [TestMethod]
-        public void HashSetLinq_LargerIdCount()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.HashSetLinq(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void HashSetLinq_NoIdsMatchCustomers()
-        {
-            var ids = new List<int> { 4, 5, 6 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.HashSetLinq(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void HashSetLinq_AllIdsMatchCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.HashSetLinq(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void BinarySearch_EmptyIds()
-        {
-            var ids = Enumerable.Empty<int>().ToList();
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.BinarySearch(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void BinarySearch_EmptyCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.BinarySearch(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void BinarySearch_EmptyIdsAndCustomers()
-        {
-            var ids = new List<int>();
-            var customers = new List<Customer>();
-
-            var result = _exclusiveFilterBenchmarks.BinarySearch(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void BinarySearch_SmallerIdCount()
-        {
-            var ids = new List<int> { 1 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.BinarySearch(ids, customers);
-
-            Assert.IsTrue(result.Count == 2);
-            Assert.IsTrue(result[0].Id == 2);
-            Assert.IsTrue(result[1].Id == 3);
-        }
-
-        [TestMethod]
-        public void BinarySearch_LargerIdCount()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.BinarySearch(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
-        public void BinarySearch_NoIdsMatchCustomers()
-        {
-            var ids = new List<int> { 4, 5, 6 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 }
-            };
-
-            var result = _exclusiveFilterBenchmarks.BinarySearch(ids, customers);
-
-            Assert.IsTrue(result.Count == 3);
-        }
-
-        [TestMethod]
-        public void BinarySearch_AllIdsMatchCustomers()
-        {
-            var ids = new List<int> { 1, 2, 3 };
-            var customers = new List<Customer>
-            {
-                new() { Id = 1 },
-                new() { Id = 2 },
-                new() { Id = 3 },
-            };
-
-            var result = _exclusiveFilterBenchmarks.BinarySearch(ids, customers);
-
-            Assert.IsTrue(result.Count == 0);
-        }
-
-        [TestMethod]
         public void ExceptBy_EmptyIds()
         {
             var ids = Enumerable.Empty<int>().ToList();
@@ -1041,6 +114,1036 @@ namespace ListFilteringListBenchmarking.UnitTest
             };
 
             var result = _exclusiveFilterBenchmarks.ExceptBy(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void RemoveAll_Any_EmptyIds()
+        {
+            var ids = Enumerable.Empty<int>().ToList();
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void RemoveAll_Any_EmptyCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void RemoveAll_Any_EmptyIdsAndCustomers()
+        {
+            var ids = new List<int>();
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void RemoveAll_Any_SmallerIdCount()
+        {
+            var ids = new List<int> { 1 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 2);
+            Assert.IsTrue(result[0].Id == 2);
+            Assert.IsTrue(result[1].Id == 3);
+        }
+
+        [TestMethod]
+        public void RemoveAll_Any_LargerIdCount()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void RemoveAll_Any_NoIdsMatchCustomers()
+        {
+            var ids = new List<int> { 4, 5, 6 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void RemoveAll_Any_AllIdsMatchCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void RemoveAll_Contains_EmptyIds()
+        {
+            var ids = Enumerable.Empty<int>().ToList();
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void RemoveAll_Contains_EmptyCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void RemoveAll_Contains_EmptyIdsAndCustomers()
+        {
+            var ids = new List<int>();
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void RemoveAll_Contains_SmallerIdCount()
+        {
+            var ids = new List<int> { 1 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 2);
+            Assert.IsTrue(result[0].Id == 2);
+            Assert.IsTrue(result[1].Id == 3);
+        }
+
+        [TestMethod]
+        public void RemoveAll_Contains_LargerIdCount()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void RemoveAll_Contains_NoIdsMatchCustomers()
+        {
+            var ids = new List<int> { 4, 5, 6 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void RemoveAll_Contains_AllIdsMatchCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void Where_Any_EmptyIds()
+        {
+            var ids = Enumerable.Empty<int>().ToList();
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.Where_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void Where_Any_EmptyCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.Where_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void Where_Any_EmptyIdsAndCustomers()
+        {
+            var ids = new List<int>();
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.Where_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void Where_Any_SmallerIdCount()
+        {
+            var ids = new List<int> { 1 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.Where_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 2);
+            Assert.IsTrue(result[0].Id == 2);
+            Assert.IsTrue(result[1].Id == 3);
+        }
+
+        [TestMethod]
+        public void Where_Any_LargerIdCount()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.Where_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void Where_Any_NoIdsMatchCustomers()
+        {
+            var ids = new List<int> { 4, 5, 6 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.Where_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void Where_Any_AllIdsMatchCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.Where_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void Where_Contains_EmptyIds()
+        {
+            var ids = Enumerable.Empty<int>().ToList();
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.Where_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void Where_Contains_EmptyCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.Where_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void Where_Contains_EmptyIdsAndCustomers()
+        {
+            var ids = new List<int>();
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.Where_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void Where_Contains_SmallerIdCount()
+        {
+            var ids = new List<int> { 1 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.Where_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 2);
+            Assert.IsTrue(result[0].Id == 2);
+            Assert.IsTrue(result[1].Id == 3);
+        }
+
+        [TestMethod]
+        public void Where_Contains_LargerIdCount()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.Where_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void Where_Contains_NoIdsMatchCustomers()
+        {
+            var ids = new List<int> { 4, 5, 6 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.Where_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void Where_Contains_AllIdsMatchCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.Where_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void FindAll_Contains_EmptyIds()
+        {
+            var ids = Enumerable.Empty<int>().ToList();
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.FindAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void FindAll_Contains_EmptyCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.FindAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void FindAll_Contains_EmptyIdsAndCustomers()
+        {
+            var ids = new List<int>();
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.FindAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void FindAll_Contains_SmallerIdCount()
+        {
+            var ids = new List<int> { 1 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.FindAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 2);
+            Assert.IsTrue(result[0].Id == 2);
+            Assert.IsTrue(result[1].Id == 3);
+        }
+
+        [TestMethod]
+        public void FindAll_Contains_LargerIdCount()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.FindAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void FindAll_Contains_NoIdsMatchCustomers()
+        {
+            var ids = new List<int> { 4, 5, 6 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.FindAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void FindAll_Contains_AllIdsMatchCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.FindAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void FindAll_Any_EmptyIds()
+        {
+            var ids = Enumerable.Empty<int>().ToList();
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.FindAll_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void FindAll_Any_EmptyCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.FindAll_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void FindAll_Any_EmptyIdsAndCustomers()
+        {
+            var ids = new List<int>();
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.FindAll_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void FindAll_Any_SmallerIdCount()
+        {
+            var ids = new List<int> { 1 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.FindAll_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 2);
+            Assert.IsTrue(result[0].Id == 2);
+            Assert.IsTrue(result[1].Id == 3);
+        }
+
+        [TestMethod]
+        public void FindAll_Any_LargerIdCount()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.FindAll_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void FindAll_Any_NoIdsMatchCustomers()
+        {
+            var ids = new List<int> { 4, 5, 6 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.FindAll_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void FindAll_Any_AllIdsMatchCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.FindAll_Any(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void HashSet_Where_Contains_EmptyIds()
+        {
+            var ids = Enumerable.Empty<int>().ToList();
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.HashSet_Where_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void HashSet_Where_Contains_EmptyCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.HashSet_Where_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void HashSet_Where_Contains_EmptyIdsAndCustomers()
+        {
+            var ids = new List<int>();
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.HashSet_Where_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void HashSet_Where_Contains_SmallerIdCount()
+        {
+            var ids = new List<int> { 1 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.HashSet_Where_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 2);
+            Assert.IsTrue(result[0].Id == 2);
+            Assert.IsTrue(result[1].Id == 3);
+        }
+
+        [TestMethod]
+        public void HashSet_Where_Contains_LargerIdCount()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.HashSet_Where_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void HashSet_Where_Contains_NoIdsMatchCustomers()
+        {
+            var ids = new List<int> { 4, 5, 6 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.HashSet_Where_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void HashSet_Where_Contains_AllIdsMatchCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.HashSet_Where_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void HashSet_RemoveAll_Contains_EmptyIds()
+        {
+            var ids = Enumerable.Empty<int>().ToList();
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.HashSet_RemoveAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void HashSet_RemoveAll_Contains_EmptyCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.HashSet_RemoveAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void HashSet_RemoveAll_Contains_EmptyIdsAndCustomers()
+        {
+            var ids = new List<int>();
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.HashSet_RemoveAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void HashSet_RemoveAll_Contains_SmallerIdCount()
+        {
+            var ids = new List<int> { 1 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.HashSet_RemoveAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 2);
+            Assert.IsTrue(result[0].Id == 2);
+            Assert.IsTrue(result[1].Id == 3);
+        }
+
+        [TestMethod]
+        public void HashSet_RemoveAll_Contains_LargerIdCount()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.HashSet_RemoveAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void HashSet_RemoveAll_Contains_NoIdsMatchCustomers()
+        {
+            var ids = new List<int> { 4, 5, 6 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.HashSet_RemoveAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void HashSet_RemoveAll_Contains_AllIdsMatchCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.HashSet_RemoveAll_Contains(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void Where_BinarySearch_EmptyIds()
+        {
+            var ids = Enumerable.Empty<int>().ToList();
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.Where_BinarySearch(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void Where_BinarySearch_EmptyCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.Where_BinarySearch(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void Where_BinarySearch_EmptyIdsAndCustomers()
+        {
+            var ids = new List<int>();
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.Where_BinarySearch(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void Where_BinarySearch_SmallerIdCount()
+        {
+            var ids = new List<int> { 1 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.Where_BinarySearch(ids, customers);
+
+            Assert.IsTrue(result.Count == 2);
+            Assert.IsTrue(result[0].Id == 2);
+            Assert.IsTrue(result[1].Id == 3);
+        }
+
+        [TestMethod]
+        public void Where_BinarySearch_LargerIdCount()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.Where_BinarySearch(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void Where_BinarySearch_NoIdsMatchCustomers()
+        {
+            var ids = new List<int> { 4, 5, 6 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.Where_BinarySearch(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void Where_BinarySearch_AllIdsMatchCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.Where_BinarySearch(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void RemoveAll_BinarySearch_EmptyIds()
+        {
+            var ids = Enumerable.Empty<int>().ToList();
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_BinarySearch(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void RemoveAll_BinarySearch_EmptyCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_BinarySearch(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void RemoveAll_BinarySearch_EmptyIdsAndCustomers()
+        {
+            var ids = new List<int>();
+            var customers = new List<Customer>();
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_BinarySearch(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void RemoveAll_BinarySearch_SmallerIdCount()
+        {
+            var ids = new List<int> { 1 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_BinarySearch(ids, customers);
+
+            Assert.IsTrue(result.Count == 2);
+            Assert.IsTrue(result[0].Id == 2);
+            Assert.IsTrue(result[1].Id == 3);
+        }
+
+        [TestMethod]
+        public void RemoveAll_BinarySearch_LargerIdCount()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_BinarySearch(ids, customers);
+
+            Assert.IsTrue(result.Count == 0);
+        }
+
+        [TestMethod]
+        public void RemoveAll_BinarySearch_NoIdsMatchCustomers()
+        {
+            var ids = new List<int> { 4, 5, 6 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 }
+            };
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_BinarySearch(ids, customers);
+
+            Assert.IsTrue(result.Count == 3);
+        }
+
+        [TestMethod]
+        public void RemoveAll_BinarySearch_AllIdsMatchCustomers()
+        {
+            var ids = new List<int> { 1, 2, 3 };
+            var customers = new List<Customer>
+            {
+                new() { Id = 1 },
+                new() { Id = 2 },
+                new() { Id = 3 },
+            };
+
+            var result = _exclusiveFilterBenchmarks.RemoveAll_BinarySearch(ids, customers);
 
             Assert.IsTrue(result.Count == 0);
         }

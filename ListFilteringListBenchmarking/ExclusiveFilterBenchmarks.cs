@@ -7,14 +7,14 @@ namespace ListFilteringListBenchmarking
     {
         [Benchmark]
         [ArgumentsSource(nameof(Data))]
-        public List<Customer> LinqExceptBy(List<int> ids, List<Customer> customers)
+        public List<Customer> ExceptBy(List<int> ids, List<Customer> customers)
         {
-            return customers.ExceptBy(ids.Select(x => x), c => c.Id).ToList();
+            return customers.ExceptBy(ids, x => x.Id).ToList();
         }
 
         [Benchmark]
         [ArgumentsSource(nameof(Data))]
-        public List<Customer> RemoveAllAny(List<int> ids, List<Customer> customers)
+        public List<Customer> RemoveAll_Any(List<int> ids, List<Customer> customers)
         {
             customers.RemoveAll(c => ids.Any(i => i == c.Id));
             return customers;
@@ -23,7 +23,7 @@ namespace ListFilteringListBenchmarking
 
         [Benchmark(Baseline = true)]
         [ArgumentsSource(nameof(Data))]
-        public List<Customer> RemoveAllContains(List<int> ids, List<Customer> customers)
+        public List<Customer> RemoveAll_Contains(List<int> ids, List<Customer> customers)
         {
             customers.RemoveAll(c => ids.Contains(c.Id));
             return customers;
@@ -31,28 +31,28 @@ namespace ListFilteringListBenchmarking
 
         [Benchmark]
         [ArgumentsSource(nameof(Data))]
-        public List<Customer> LinqAny(List<int> ids, List<Customer> customers)
+        public List<Customer> Where_Any(List<int> ids, List<Customer> customers)
         {
             return customers.Where(customer => !ids.Any(id => customer.Id == id)).ToList();
         }
 
         [Benchmark]
         [ArgumentsSource(nameof(Data))]
-        public List<Customer> LinqContains(List<int> ids, List<Customer> customers)
+        public List<Customer> Where_Contains(List<int> ids, List<Customer> customers)
         {
             return customers.Where(c => !ids.Contains(c.Id)).ToList();
         }
 
         [Benchmark]
         [ArgumentsSource(nameof(Data))]
-        public List<Customer> LinqFindAllContains(List<int> ids, List<Customer> customers)
+        public List<Customer> FindAll_Contains(List<int> ids, List<Customer> customers)
         {
             return customers.FindAll(c => !ids.Contains(c.Id));
         }
 
         [Benchmark]
         [ArgumentsSource(nameof(Data))]
-        public List<Customer> LinqFindAllAny(List<int> ids, List<Customer> customers)
+        public List<Customer> FindAll_Any(List<int> ids, List<Customer> customers)
         {
             return customers.FindAll(c => !ids.Any(i => i == c.Id));
         }
@@ -60,7 +60,7 @@ namespace ListFilteringListBenchmarking
 
         [Benchmark]
         [ArgumentsSource(nameof(Data))]
-        public List<Customer> HashSetLinq(List<int> ids, List<Customer> customers)
+        public List<Customer> HashSet_Where_Contains(List<int> ids, List<Customer> customers)
         {
             var idSet = new HashSet<int>(ids);
             return customers.Where(c => !idSet.Contains(c.Id)).ToList();
@@ -68,19 +68,30 @@ namespace ListFilteringListBenchmarking
 
         [Benchmark]
         [ArgumentsSource(nameof(Data))]
-        public List<Customer> BinarySearch(List<int> ids, List<Customer> customers)
+        public List<Customer> HashSet_RemoveAll_Contains(List<int> ids, List<Customer> customers)
         {
-            ids.Sort();
-            customers.RemoveAll(c => ids.BinarySearch(c.Id) >= 0);
+            var idSet = new HashSet<int>(ids);
+            customers.RemoveAll(c => idSet.Contains(c.Id));
 
             return customers;
         }
 
         [Benchmark]
         [ArgumentsSource(nameof(Data))]
-        public List<Customer> ExceptBy(List<int> ids, List<Customer> customers)
+        public List<Customer> Where_BinarySearch(List<int> ids, List<Customer> customers)
         {
-            return customers.ExceptBy(ids, x => x.Id).ToList();
+            ids.Sort();
+            return customers.Where(c => ids.BinarySearch(c.Id) < 0).ToList();
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(Data))]
+        public List<Customer> RemoveAll_BinarySearch(List<int> ids, List<Customer> customers)
+        {
+            ids.Sort();
+            customers.RemoveAll(c => ids.BinarySearch(c.Id) >= 0);
+
+            return customers;
         }
 
         public IEnumerable<object[]> Data()

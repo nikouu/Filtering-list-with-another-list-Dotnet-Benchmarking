@@ -75,17 +75,17 @@ Customer Id: 5
 
 The methods are tested against 9 datasets:
 
-| Dataset                       | ID count | Customer count | Description                                                                               |
-| ----------------------------- | -------: | -------------: | ----------------------------------------------------------------------------------------- |
-| Simple case - small           |      100 |           1000 | A small volume of the case where there are less IDs than customers                        |
-| Simple case - medium          |     1000 |          10000 | A medium volume of the case where there are less IDs than customers                       |
-| Simple case - large           |    10000 |         100000 | A large volume of the case where there are less IDs than customers                        |
-| Larger IDs case - small       |     1000 |            100 | A small volume of the case where there are more IDs than customers                        |
-| Larger IDs case - medium      |    10000 |           1000 | A medium volume of the case where there are more IDs than customers                       |
-| Larger IDs case - large       |   100000 |          10000 | A large volume of the case where there are more IDs than customers                        |
-| Simple shuffled case - small  |      100 |           1000 | A small volume of the case where there are less IDs than customers but both are shuffled  |
-| Simple shuffled case - medium |     1000 |          10000 | A medium volume of the case where there are less IDs than customers but both are shuffled |
-| Simple shuffled case - large  |    10000 |         100000 | A large volume of the case where there are less IDs than customers but both are shuffled  |
+| Dataset                       | Abbrev | ID count | Customer count | Description                                                                               |
+| ----------------------------- | ------ | -------: | -------------: | ----------------------------------------------------------------------------------------- |
+| Simple case - small           | sc-s   |      100 |           1000 | A small volume of the case where there are less IDs than customers                        |
+| Simple case - medium          | sc-m   |     1000 |          10000 | A medium volume of the case where there are less IDs than customers                       |
+| Simple case - large           | sc-l   |    10000 |         100000 | A large volume of the case where there are less IDs than customers                        |
+| Larger IDs case - small       | lic-s  |     1000 |            100 | A small volume of the case where there are more IDs than customers                        |
+| Larger IDs case - medium      | lic-m  |    10000 |           1000 | A medium volume of the case where there are more IDs than customers                       |
+| Larger IDs case - large       | lic-l  |   100000 |          10000 | A large volume of the case where there are more IDs than customers                        |
+| Simple shuffled case - small  | ssc-s  |      100 |           1000 | A small volume of the case where there are less IDs than customers but both are shuffled  |
+| Simple shuffled case - medium | ssc-m  |     1000 |          10000 | A medium volume of the case where there are less IDs than customers but both are shuffled |
+| Simple shuffled case - large  | ssc-l  |    10000 |         100000 | A large volume of the case where there are less IDs than customers but both are shuffled  |
 
 ### Other points
 - The `Customer` type is a `record` to help facilitate the easier result checking via the  `ReturnValueValidator` attribute due to the tidy way `record` types handle equality.
@@ -118,88 +118,91 @@ Code found in [ExclusiveFilterBenchmarks.cs](/ListFilteringListBenchmarking/Excl
 
 ### Inclusive filter
 
-Taking the top two performers (and baseline, `LinqContains`) for both speed and allocations in all categories. Some cases may have a more performant method but large allocations or vice versa:
+Taking the top two performers (and baseline, `Where_Contains`) for both speed and allocations in all categories. Some cases may have a more performant method but large allocations or vice versa:
 
-| Method              | Dataset                       |    ids | customers |         Mean | **Ratio** | Allocated | **Alloc Ratio** |
-| ------------------- | ----------------------------- | -----: | --------: | -----------: | --------: | --------: | --------------: |
-| LinqContains        | Simple case - small           |    100 |      1000 |    13.875 us |      1.00 |    2.3 KB |            1.00 |
-| LinqFindAllContains | Simple case - small           |    100 |      1000 |    10.871 us |      0.79 |   2.23 KB |            0.97 |
-| BinarySearch        | Simple case - small           |    100 |      1000 |    12.257 us |      0.88 |    2.3 KB |            1.00 |
-|                     |                               |        |           |              |           |           |                 |
-| LinqContains        | Simple case - medium          |   1000 |     10000 |    690.76 us |      1.00 |  16.37 KB |            1.00 |
-| LinqFindAllContains | Simple case - medium          |   1000 |     10000 |    807.61 us |      1.14 |   16.3 KB |            1.00 |
-| BinarySearch        | Simple case - medium          |   1000 |     10000 |    168.30 us |      0.24 |  16.37 KB |            1.00 |
-|                     |                               |        |           |              |           |           |                 |
-| LinqContains        | Simple case - large           |  10000 |    100000 | 103,830.7 us |     1.000 | 256.54 KB |            1.00 |
-| HashSetLinq         | Simple case - large           |  10000 |    100000 |     903.1 us |     0.009 |  414.5 KB |            1.62 |
-| BinarySearch        | Simple case - large           |  10000 |    100000 |   2,294.1 us |     0.022 | 256.48 KB |            1.00 |
-|                     |                               |        |           |              |           |           |                 |
-| LinqContains        | Larger IDs case - small       |   1000 |       100 |     1.655 us |      1.00 |    2.3 KB |            1.00 |
-| LinqFindAllContains | Larger IDs case - small       |   1000 |       100 |     1.391 us |      0.79 |   2.23 KB |            0.97 |
-| BinarySearch        | Larger IDs case - small       |   1000 |       100 |     6.108 us |      0.90 |    2.3 KB |            1.00 |
-|                     |                               |        |           |              |           |           |                 |
-| LinqContains        | Larger IDs case - medium      |  10000 |      1000 |     51.25 us |      1.00 |  16.37 KB |            1.00 |
-| LinqFindAllContains | Larger IDs case - medium      |  10000 |      1000 |     50.19 us |      0.99 |   16.3 KB |            1.00 |
-| BinarySearch        | Larger IDs case - medium      |  10000 |      1000 |     91.82 us |      1.80 |  16.37 KB |            1.00 |
-|                     |                               |        |           |              |           |           |                 |
-| LinqContains        | Larger IDs case - large       | 100000 |     10000 |   4,314.1 us |      1.00 | 256.48 KB |            1.00 |
-| LinqFindAllContains | Larger IDs case - large       | 100000 |     10000 |   4,256.4 us |      0.99 | 256.41 KB |            1.00 |
-| BinarySearch        | Larger IDs case - large       | 100000 |     10000 |   1,127.8 us |      0.26 | 256.48 KB |            1.00 |
-|                     |                               |        |           |              |           |           |                 |
-| LinqContains        | Simple shuffled case - small  |    100 |      1000 |    14.922 us |      1.00 |    2.3 KB |            1.00 |
-| LinqFindAllContains | Simple shuffled case - small  |    100 |      1000 |    11.804 us |      0.79 |   2.23 KB |            0.97 |
-| BinarySearch        | Simple shuffled case - small  |    100 |      1000 |    13.418 us |      0.90 |    2.3 KB |            1.00 |
-|                     |                               |        |           |              |           |           |                 |
-| LinqContains        | Simple shuffled case - medium |   1000 |     10000 |     695.8 us |      1.00 |  16.37 KB |            1.00 |
-| LinqFindAllContains | Simple shuffled case - medium |   1000 |     10000 |     807.9 us |      1.16 |   16.3 KB |            1.00 |
-| BinarySearch        | Simple shuffled case - medium |   1000 |     10000 |     203.2 us |      0.29 |  16.37 KB |            1.00 |
-|                     |                               |        |           |              |           |           |                 |
-| LinqContains        | Simple shuffled case - large  |  10000 |    100000 |   111.992 ms |      1.00 | 256.54 KB |            1.00 |
-| HashSetLinq         | Simple shuffled case - large  |  10000 |    100000 |     1.831 ms |      0.02 |  414.5 KB |            1.62 |
-| BinarySearch        | Simple shuffled case - large  |  10000 |    100000 |     3.895 ms |      0.03 | 256.48 KB |            1.00 |
 
-#### `LinqContains` ⭐
 
-`LinqContains` is the baseline and is nearly always in the top 4. It is a performant, "normal", and an easy to understand piece of code - a solid workhorse.
+| Method                   | Dataset |         Mean | **Ratio** | Allocated | **Alloc Ratio** |
+| ------------------------ | ------- | -----------: | --------: | --------: | --------------: |
+| Where_Contains           | sc-s    |    12.417 us |      1.00 |    2.3 KB |            1.00 |
+| FindAll_Contains         | sc-s    |    10.345 us |      0.83 |   2.23 KB |            0.97 |
+| FindAll_BinarySearch     | sc-s    |    11.618 us |      0.94 |   2.23 KB |            0.97 |
+|                          |         |              |           |           |                 |
+| Where_Contains           | sc-m    |    813.29 us |      1.00 |  16.37 KB |            1.00 |
+| Where_BinarySearch       | sc-m    |    163.59 us |      0.20 |  16.37 KB |            1.00 |
+| FindAll_BinarySearch     | sc-m    |    163.38 us |      0.20 |   16.3 KB |            1.00 |
+|                          |         |              |           |           |                 |
+| Where_Contains           | sc-l    | 103,707.2 us |     1.000 | 256.54 KB |            1.00 |
+| HashSet_Where_Contains   | sc-l    |     907.3 us |     0.009 |  414.5 KB |            1.62 |
+| HashSet_FindAll_Contains | sc-l    |     815.9 us |     0.008 | 414.43 KB |            1.62 |
+|                          |         |              |           |           |                 |
+| Where_Contains           | lic-s   |     1.483 us |      1.00 |    2.3 KB |            1.00 |
+| FindAll_Contains         | lic-s   |     1.308 us |      0.89 |   2.23 KB |            0.97 |
+| FindAll_BinarySearch     | lic-s   |     6.037 us |      4.06 |   2.23 KB |            0.97 |
+|                          |         |              |           |           |                 |
+| Where_Contains           | lic-m   |     50.74 us |      1.00 |  16.37 KB |            1.00 |
+| FindAll_Contains         | lic-m   |     50.15 us |      0.99 |   16.3 KB |            1.00 |
+| Where_BinarySearch       | lic-m   |     90.35 us |      1.78 |  16.37 KB |            1.00 |
+|                          |         |              |           |           |                 |
+| Where_Contains           | lic-l   |   4,358.1 us |      1.00 | 256.48 KB |            1.00 |
+| Where_BinarySearch       | lic-l   |   1,081.8 us |      0.24 | 256.48 KB |            1.00 |
+| FindAll_BinarySearch     | lic-l   |   1,103.9 us |      0.25 | 256.41 KB |            1.00 |
+|                          |         |              |           |           |                 |
+| Where_Contains           | ssc-s   |    14.850 us |      1.00 |    2.3 KB |            1.00 |
+| FindAll_Contains         | ssc-s   |    11.342 us |      0.76 |   2.23 KB |            0.97 |
+| FindAll_BinarySearch     | ssc-s   |    13.286 us |      0.90 |   2.23 KB |            0.97 |
+|                          |         |              |           |           |                 |
+| Where_Contains           | ssc-m   |    837.87 us |      1.00 |  16.37 KB |            1.00 |
+| HashSet_FindAll_Contains | ssc-m   |     92.02 us |      0.11 |  33.69 KB |            2.06 |
+| FindAll_BinarySearch     | ssc-m   |    185.69 us |      0.22 |   16.3 KB |            1.00 |
+|                          |         |              |           |           |                 |
+| Where_Contains           | ssc-l   |   112.498 ms |      1.00 | 256.56 KB |            1.00 |
+| HashSet_Where_Contains   | ssc-l   |     1.607 ms |      0.01 |  414.5 KB |            1.62 |
+| HashSet_FindAll_Contains | ssc-l   |     1.524 ms |      0.01 | 414.43 KB |            1.62 |
+
+#### `Where_Contains` and `FindAll_Contains`⭐
+
+`Where_Contains` is the baseline and is nearly always in the top 4. It is a performant, "normal", and an easy to understand piece of code - a solid workhorse. Similarly `FindAll_Contains` is very close in performance, sometimes beating `Where_Contains` in speed and allocations.
 
 ```csharp
-public List<Customer> LinqContains(List<int> ids, List<Customer> customers)
+public List<Customer> Where_Contains(List<int> ids, List<Customer> customers)
 {
     return customers.Where(c => ids.Contains(c.Id)).ToList();
 }
 ```
 
-#### `LinqFindAllContains`
-
-`LinqFindAllContains` tends to be very close in performance to `LinqContains`, even beating it out on some smaller datasets. Also a solid everyday choice.
+#### `FindAll_BinarySearch` and `Where_BinarySearch`
+From research it doesn't seem commonly used, however using `BinarySearch` is always top 3 for the critera nearly always beating the baseline and sometimes by an incredible margin.
 
 ```csharp
-public List<Customer> LinqFindAllContains(List<int> ids, List<Customer> customers)
+public List<Customer> FindAll_BinarySearch(List<int> ids, List<Customer> customers)
 {
-    return customers.FindAll(c => ids.Contains(c.Id));
+    ids.Sort();
+    return customers.FindAll(c => ids.BinarySearch(c.Id) >= 0);
 }
-```
 
-#### `BinarySearch`
-From research it doesn't seem commonly used, however it is always top 3 for the critera nearly always beating the baseline and sometimes by an incredible margin.
-
-```csharp
-public List<Customer> BinarySearch(List<int> ids, List<Customer> customers)
+public List<Customer> Where_BinarySearch(List<int> ids, List<Customer> customers)
 {
     ids.Sort();
     return customers.Where(c => ids.BinarySearch(c.Id) >= 0).ToList();
 }
 ```
 
-#### `HashSetLinq`
+#### `HashSet_Where_Contains` and `HashSet_FindAll_Contains`
 
-While allocations for `HashSetLinq` are often higher than the other top performers (still small enough when compared to the rest of the field), it easily outperforms for large datasets. I believe due to the `O(1)` lookup speed for large datasets - even if we have to take the cost of converting the ID list into a `HashSet`. 
+While allocations for the `HashSet` duo are often higher than the other top performers (still small enough when compared to the rest of the field), they easily outperform for large datasets. I believe due to the `O(1)` lookup speed for large datasets - even if we have to take the cost of converting the ID list into a `HashSet`. 
 
 ```csharp
-public List<Customer> HashSetLinq(List<int> ids, List<Customer> customers)
+public List<Customer> HashSet_Where_Contains(List<int> ids, List<Customer> customers)
 {
     var idSet = new HashSet<int>(ids);
     return customers.Where(c => idSet.Contains(c.Id)).ToList();
+}
+
+public List<Customer> HashSet_FindAll_Contains(List<int> ids, List<Customer> customers)
+{
+    var idSet = new HashSet<int>(ids);
+    return customers.FindAll(c => idSet.Contains(c.Id));
 }
 ```
 
@@ -212,102 +215,97 @@ public List<Customer> HashSetLinq(List<int> ids, List<Customer> customers)
 Taking the top two performers (and baseline, `RemoveAllContains`) for both speed and allocations in all categories. Some cases may have a more performant method but large allocations or vice versa:
 
 
-| Method              | Dataset                       |    ids | customers |          Mean | **Ratio** | Allocated | **Alloc Ratio** |
-| ------------------- | ----------------------------- | -----: | --------: | ------------: | --------: | --------: | --------------: |
-| RemoveAllContains   | Simple case - small           |    100 |      1000 |      9.721 us |      1.00 |      88 B |            1.00 |
-| HashSetLinq         | Simple case - small           |    100 |      1000 |     10.146 us |      1.05 |   18632 B |          211.73 |
-| BinarySearch        | Simple case - small           |    100 |      1000 |      9.452 us |      0.97 |      88 B |            1.00 |
-|                     |                               |        |           |               |           |           |                 |
-| RemoveAllContains   | Simple case - medium          |   1000 |     10000 |      771.8 us |      1.00 |      88 B |            1.00 |
-| HashSetLinq         | Simple case - medium          |   1000 |     10000 |      142.4 us |      0.19 |  280438 B |        3,186.80 |
-| BinarySearch        | Simple case - medium          |   1000 |     10000 |      117.5 us |      0.15 |      88 B |            1.00 |
-|                     |                               |        |           |               |           |           |                 |
-| RemoveAllContains   | Simple case - large           |  10000 |    100000 |     99.564 ms |      1.00 |     155 B |            1.00 |
-| HashSetLinq         | Simple case - large           |  10000 |    100000 |      1.228 ms |      0.01 | 2261241 B |       14,588.65 |
-| BinarySearch        | Simple case - large           |  10000 |    100000 |      1.614 ms |      0.02 |      89 B |            0.57 |
-|                     |                               |        |           |               |           |           |                 |
-| RemoveAllAny        | Larger IDs case - small       |   1000 |       100 |      9.820 ns |      0.94 |      88 B |            1.00 |
-| RemoveAllContains   | Larger IDs case - small       |   1000 |       100 |     10.454 ns |      1.00 |      88 B |            1.00 |
-| LinqFindAllContains | Larger IDs case - small       |   1000 |       100 |    975.455 ns |     92.84 |     120 B |            1.36 |
-|                     |                               |        |           |               |           |           |                 |
-| RemoveAllAny        | Larger IDs case - medium      |  10000 |      1000 |      11.51 ns |      1.00 |      88 B |            1.00 |
-| RemoveAllContains   | Larger IDs case - medium      |  10000 |      1000 |      11.83 ns |      1.00 |      88 B |            1.00 |
-| BinarySearch        | Larger IDs case - medium      |  10000 |      1000 |  44,818.63 ns |  3,874.69 |      88 B |            1.00 |
-|                     |                               |        |           |               |           |           |                 |
-| RemoveAllAny        | Larger IDs case - large       | 100000 |     10000 |      14.56 ns |      1.28 |      88 B |            1.00 |
-| RemoveAllContains   | Larger IDs case - large       | 100000 |     10000 |      11.44 ns |      1.00 |      88 B |            1.00 |
-| BinarySearch        | Larger IDs case - large       | 100000 |     10000 | 495,794.52 ns | 44,435.94 |      88 B |            1.00 |
-|                     |                               |        |           |               |           |           |                 |
-| RemoveAllContains   | Simple shuffled case - small  |    100 |      1000 |      9.706 us |      1.00 |      88 B |            1.00 |
-| LinqFindAllContains | Simple shuffled case - small  |    100 |      1000 |     15.892 us |      1.64 |   16688 B |          189.64 |
-| BinarySearch        | Simple shuffled case - small  |    100 |      1000 |      9.322 us |      0.95 |      88 B |            1.00 |
-|                     |                               |        |           |               |           |           |                 |
-| RemoveAllContains   | Simple shuffled case - medium |   1000 |     10000 |      784.9 us |      1.00 |      88 B |            1.00 |
-| LinqContains        | Simple shuffled case - medium |   1000 |     10000 |      814.1 us |      1.04 |  262630 B |        2,984.43 |
-| BinarySearch        | Simple shuffled case - medium |   1000 |     10000 |      124.7 us |      0.16 |      88 B |            1.00 |
-|                     |                               |        |           |               |           |           |                 |
-| RemoveAllContains   | Simple shuffled case - large  |  10000 |    100000 |    105.250 ms |      1.00 |     168 B |            1.00 |
-| HashSetLinq         | Simple shuffled case - large  |  10000 |    100000 |      2.661 ms |      0.03 | 2260480 B |       13,455.24 |
-| BinarySearch        | Simple shuffled case - large  |  10000 |    100000 |      2.492 ms |      0.02 |      90 B |            0.54 |
+| Method                   | Dataset |       Mean | **Ratio** | Allocated | **Alloc Ratio** |
+| ------------------------ | ------- | ---------: | --------: | --------: | --------------: |
+| Where_Contains           | sc-s    | 110.181 ms |      1.00 | 256.54 KB |            1.00 |
+| HashSet_Where_Contains   | sc-s    |   1.696 ms |      0.02 |  414.5 KB |            1.62 |
+| HashSet_FindAll_Contains | sc-s    |   1.573 ms |      0.01 | 414.43 KB |            1.62 |
+|                          |         |            |           |           |                 |
+| ForEach                  | sc-m    | 725.515 ms |      6.60 |  256.7 KB |            1.00 |
+| HashSet_Where_Contains   | sc-m    |   1.701 ms |      0.02 |  414.5 KB |            1.62 |
+| HashSet_FindAll_Contains | sc-m    |   1.556 ms |      0.01 | 414.43 KB |            1.62 |
+|                          |         |            |           |           |                 |
+| Where_Contains           | sc-l    | 112.457 ms |      1.00 | 256.54 KB |            1.00 |
+| HashSet_Where_Contains   | sc-l    |   1.660 ms |      0.02 |  414.5 KB |            1.62 |
+| HashSet_FindAll_Contains | sc-l    |   1.618 ms |      0.01 | 414.43 KB |            1.62 |
+|                          |         |            |           |           |                 |
+| Where_Contains           | lic-s   | 111.736 ms |      1.00 | 256.54 KB |            1.00 |
+| HashSet_Where_Contains   | lic-s   |   1.726 ms |      0.02 |  414.5 KB |            1.62 |
+| HashSet_FindAll_Contains | lic-s   |   1.607 ms |      0.01 | 414.43 KB |            1.62 |
+|                          |         |            |           |           |                 |
+| Where_Contains           | lic-m   | 110.823 ms |      1.00 | 256.54 KB |            1.00 |
+| HashSet_Where_Contains   | lic-m   |   1.810 ms |      0.02 |  414.5 KB |            1.62 |
+| HashSet_FindAll_Contains | lic-m   |   1.798 ms |      0.02 | 414.43 KB |            1.62 |
+|                          |         |            |           |           |                 |
+| Where_Contains           | lic-l   | 110.460 ms |      1.00 | 256.54 KB |            1.00 |
+| HashSet_Where_Contains   | lic-l   |   1.721 ms |      0.02 |  414.5 KB |            1.62 |
+| HashSet_FindAll_Contains | lic-l   |   1.595 ms |      0.01 | 414.43 KB |            1.62 |
+|                          |         |            |           |           |                 |
+| Where_Contains           | ssc-s   | 110.784 ms |      1.00 | 256.54 KB |            1.00 |
+| HashSet_Where_Contains   | ssc-s   |   1.790 ms |      0.02 |  414.5 KB |            1.62 |
+| HashSet_FindAll_Contains | ssc-s   |   1.579 ms |      0.01 | 414.43 KB |            1.62 |
+|                          |         |            |           |           |                 |
+| Where_Contains           | ssc-m   | 110.806 ms |      1.00 | 256.54 KB |            1.00 |
+| HashSet_Where_Contains   | ssc-m   |   1.758 ms |      0.02 |  414.5 KB |            1.62 |
+| HashSet_FindAll_Contains | ssc-m   |   1.605 ms |      0.01 | 414.43 KB |            1.62 |
+|                          |         |            |           |           |                 |
+| Where_Contains           | ssc-l   | 110.529 ms |      1.00 | 256.54 KB |            1.00 |
+| HashSet_Where_Contains   | ssc-l   |   1.702 ms |      0.02 |  414.5 KB |            1.62 |
+| HashSet_FindAll_Contains | ssc-l   |   1.627 ms |      0.01 | 414.43 KB |            1.62 |
 
-#### `RemoveAllContains` ⭐
+#### `Where_Contains` and `FindAll_Contains` ⭐
 
-The baseline and best overall utility. A great choice for all cases. 
+The baseline and best overall utility. A decent choice for all cases when compared to the other options. `FindAll_Contains` has very similar performance.
 
 ```csharp
-public List<Customer> RemoveAllContains(List<int> ids, List<Customer> customers)
+public List<Customer> Where_Contains(List<int> ids, List<Customer> customers)
 {
-    customers.RemoveAll(c => ids.Contains(c.Id));
+    return customers.Where(c => !ids.Contains(c.Id)).ToList();
+}
+
+public List<Customer> FindAll_Contains(List<int> ids, List<Customer> customers)
+{
+    return customers.FindAll(c => !ids.Contains(c.Id));
+}
+```
+
+#### `HashSet_Where_Contains` and `HashSet_FindAll_Contains`
+
+Always extremely performant when compared to the baseline, often performing the action in ~1% of the baseline time. If you require performance, it's worth looking into how a `HashSet` can improve your scenario.
+
+```csharp
+public List<Customer> HashSet_Where_Contains(List<int> ids, List<Customer> customers)
+{
+    var idSet = new HashSet<int>(ids);
+    return customers.Where(c => !idSet.Contains(c.Id)).ToList();
+}
+
+public List<Customer> HashSet_RemoveAll_Contains(List<int> ids, List<Customer> customers)
+{
+    var idSet = new HashSet<int>(ids);
+    customers.RemoveAll(c => idSet.Contains(c.Id));
+
     return customers;
 }
 ```
 
-#### `BinarySearch`
+#### `Where_BinarySearch` and `FindAll_BinarySearch`
 
-Always in the top 3. Extremely performant when the ID list is small regardless of the customer list size.
+Anather extremely performant runner up, often performing the action in ~3% of the baseline up. The advantage this has over the hashset examples is this will often run at the lowest allocations out of all the scenarios tested.
 
 ```csharp
-public List<Customer> BinarySearch(List<int> ids, List<Customer> customers)
+public List<Customer> Where_BinarySearch(List<int> ids, List<Customer> customers)
+{
+    ids.Sort();
+    return customers.Where(c => ids.BinarySearch(c.Id) < 0).ToList();
+}
+
+public List<Customer> RemoveAll_BinarySearch(List<int> ids, List<Customer> customers)
 {
     ids.Sort();
     customers.RemoveAll(c => ids.BinarySearch(c.Id) >= 0);
 
     return customers;
-}
-```
-
-#### `HashSetLinq`
-
-Higher allocations but can be extremely performant in the right scenarios.
-
-```csharp
-public List<Customer> HashSetLinq(List<int> ids, List<Customer> customers)
-{
-    var idSet = new HashSet<int>(ids);
-    return customers.Where(c => !idSet.Contains(c.Id)).ToList();
-}
-```
-
-#### `RemoveAllAny`
-
-Performant in the cases where the ID list is large.
-
-```csharp
-public List<Customer> RemoveAllAny(List<int> ids, List<Customer> customers)
-{
-    customers.RemoveAll(c => ids.Any(i => i == c.Id));
-    return customers;
-}
-```
-
-#### `LinqContains`
-
-Made it in only because the others are worse.
-
-```csharp
-public List<Customer> LinqContains(List<int> ids, List<Customer> customers)
-{
-    return customers.Where(c => !ids.Contains(c.Id)).ToList();
 }
 ```
 
@@ -317,23 +315,23 @@ Not every filter will have a link as I've picked up how to do some of these anyw
 
 ### Inclusive filter
 
-| Method              | Link                                                                                                               |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| LinqAny             | [link](https://stackoverflow.com/a/41929414)                                                                      |
-| LinqContains        | [link](https://stackoverflow.com/a/61484703)                                                                       |
-| LinqJoin            | [link](https://dotnetable.wordpress.com/2015/06/20/find-all-items-in-list-which-exist-in-another-list-using-linq/) |
-| HashSetLinq         | [link](https://stackoverflow.com/a/32013973)                                                                       |
+| Method       | Link                                                                                                               |
+| ------------ | ------------------------------------------------------------------------------------------------------------------ |
+| LinqAny      | [link](https://stackoverflow.com/a/41929414)                                                                       |
+| LinqContains | [link](https://stackoverflow.com/a/61484703)                                                                       |
+| LinqJoin     | [link](https://dotnetable.wordpress.com/2015/06/20/find-all-items-in-list-which-exist-in-another-list-using-linq/) |
+| HashSetLinq  | [link](https://stackoverflow.com/a/32013973)                                                                       |
 
 ### Exclusive filter
 
-| Method              | Link                                                                                     |
-| ------------------- | ---------------------------------------------------------------------------------------- |
-| LinqExceptBy        | [link](https://stackoverflow.com/a/75409994)                                             |
-| LinqAny             | [link](https://stackoverflow.com/a/18977915)                                             |
-| LinqContains        | [link](https://stackoverflow.com/a/15540930)                                             |
-| LinqFindAllContains | [link](https://copyprogramming.com/howto/csharp-linq-filter-list-of-lists-code-example)] |
-| ForRemoveAt         | [link](https://stackoverflow.com/a/1582317)                                              |
-| BinarySearch        | [link](https://stackoverflow.com/a/15541014)                                             |
+| Method              | Link                                                                                    |
+| ------------------- | --------------------------------------------------------------------------------------- |
+| LinqExceptBy        | [link](https://stackoverflow.com/a/75409994)                                            |
+| LinqAny             | [link](https://stackoverflow.com/a/18977915)                                            |
+| LinqContains        | [link](https://stackoverflow.com/a/15540930)                                            |
+| LinqFindAllContains | [link](https://copyprogramming.com/howto/csharp-linq-filter-list-of-lists-code-example) |
+| ForRemoveAt         | [link](https://stackoverflow.com/a/1582317)                                             |
+| BinarySearch        | [link](https://stackoverflow.com/a/15541014)                                            |
 
 ## Notes
 
