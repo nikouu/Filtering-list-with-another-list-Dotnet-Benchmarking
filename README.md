@@ -206,41 +206,41 @@ Taking the top two performers (and baseline, `RemoveAll_Contains`) for both spee
 
 | Method                     | Dataset |          Mean | **Ratio** | Allocated | **Alloc Ratio** |
 | -------------------------- | ------- | ------------: | --------: | --------: | --------------: |
-| RemoveAll_Contains         |         |      9.418 us |      1.00 |      88 B |            1.00 |
-| HashSet_RemoveAll_Contains |         |      5.367 us |      0.57 |    1960 B |           22.27 |
-| RemoveAll_BinarySearch     |         |      9.344 us |      1.00 |      88 B |            1.00 |
+| RemoveAll_Contains         | sc-s    |      9.418 us |      1.00 |      88 B |            1.00 |
+| HashSet_RemoveAll_Contains | sc-s    |      5.367 us |      0.57 |    1960 B |           22.27 |
+| RemoveAll_BinarySearch     | sc-s    |      9.344 us |      1.00 |      88 B |            1.00 |
 |                            |         |               |           |           |                 |
-| RemoveAll_Contains         |         |     755.26 us |      1.00 |      88 B |            1.00 |
-| HashSet_RemoveAll_Contains |         |      52.25 us |      0.07 |   17896 B |          203.36 |
-| RemoveAll_BinarySearch     |         |     118.02 us |      0.16 |      88 B |            1.00 |
+| RemoveAll_Contains         | sc-m    |     755.26 us |      1.00 |      88 B |            1.00 |
+| HashSet_RemoveAll_Contains | sc-m    |      52.25 us |      0.07 |   17896 B |          203.36 |
+| RemoveAll_BinarySearch     | sc-m    |     118.02 us |      0.16 |      88 B |            1.00 |
 |                            |         |               |           |           |                 |
-| RemoveAll_Contains         |         |   81,210.8 us |     1.000 |     145 B |            1.00 |
-| HashSet_RemoveAll_Contains |         |      647.3 us |     0.008 |  161909 B |        1,116.61 |
-| RemoveAll_BinarySearch     |         |    1,564.6 us |     0.019 |      89 B |            0.61 |
+| RemoveAll_Contains         | sc-l    |   81,210.8 us |     1.000 |     145 B |            1.00 |
+| HashSet_RemoveAll_Contains | sc-l    |      647.3 us |     0.008 |  161909 B |        1,116.61 |
+| RemoveAll_BinarySearch     | sc-l    |    1,564.6 us |     0.019 |      89 B |            0.61 |
 |                            |         |               |           |           |                 |
-| RemoveAll_Any              |         |      12.18 ns |      1.05 |      88 B |            1.00 |
-| RemoveAll_Contains         |         |      11.69 ns |      1.00 |      88 B |            1.00 |
-| FindAll_Contains           |         |     947.80 ns |     82.01 |     120 B |            1.36 |
+| RemoveAll_Any              | lic-s   |      12.18 ns |      1.05 |      88 B |            1.00 |
+| RemoveAll_Contains         | lic-s   |      11.69 ns |      1.00 |      88 B |            1.00 |
+| FindAll_Contains           | lic-s   |     947.80 ns |     82.01 |     120 B |            1.36 |
 |                            |         |               |           |           |                 |
-| RemoveAll_Any              |         |      11.54 ns |      0.96 |      88 B |            1.00 |
-| RemoveAll_Contains         |         |      12.01 ns |      1.00 |      88 B |            1.00 |
-| RemoveAll_BinarySearch     |         |  44,010.89 ns |  3,579.00 |      88 B |            1.00 |
+| RemoveAll_Any              | lic-m   |      11.54 ns |      0.96 |      88 B |            1.00 |
+| RemoveAll_Contains         | lic-m   |      12.01 ns |      1.00 |      88 B |            1.00 |
+| RemoveAll_BinarySearch     | lic-m   |  44,010.89 ns |  3,579.00 |      88 B |            1.00 |
 |                            |         |               |           |           |                 |
-| RemoveAll_Any              |         |      14.14 ns |      1.28 |      88 B |            1.00 |
-| RemoveAll_Contains         |         |      11.02 ns |      1.00 |      88 B |            1.00 |
-| RemoveAll_BinarySearch     |         | 493,290.26 ns | 44,890.50 |      88 B |            1.00 |
+| RemoveAll_Any              | lic-l   |      14.14 ns |      1.28 |      88 B |            1.00 |
+| RemoveAll_Contains         | lic-l   |      11.02 ns |      1.00 |      88 B |            1.00 |
+| RemoveAll_BinarySearch     | lic-l   | 493,290.26 ns | 44,890.50 |      88 B |            1.00 |
 |                            |         |               |           |           |                 |
-| RemoveAll_Contains         |         |      9.714 us |      1.00 |      88 B |            1.00 |
-| HashSet_RemoveAll_Contains |         |      5.850 us |      0.60 |    1960 B |           22.27 |
-| RemoveAll_BinarySearch     |         |      9.138 us |      0.94 |      88 B |            1.00 |
+| RemoveAll_Contains         | ssc-s   |      9.714 us |      1.00 |      88 B |            1.00 |
+| HashSet_RemoveAll_Contains | ssc-s   |      5.850 us |      0.60 |    1960 B |           22.27 |
+| RemoveAll_BinarySearch     | ssc-s   |      9.138 us |      0.94 |      88 B |            1.00 |
 |                            |         |               |           |           |                 |
-| RemoveAll_Contains         |         |     636.78 us |      1.00 |      88 B |            1.00 |
-| HashSet_RemoveAll_Contains |         |      68.90 us |      0.11 |   17896 B |          203.36 |
-| RemoveAll_BinarySearch     |         |     122.05 us |      0.19 |      88 B |            1.00 |
+| RemoveAll_Contains         | ssc-m   |     636.78 us |      1.00 |      88 B |            1.00 |
+| HashSet_RemoveAll_Contains | ssc-m   |      68.90 us |      0.11 |   17896 B |          203.36 |
+| RemoveAll_BinarySearch     | ssc-m   |     122.05 us |      0.19 |      88 B |            1.00 |
 |                            |         |               |           |           |                 |
-| RemoveAll_Contains         |         |     87.107 ms |      1.00 |     155 B |            1.00 |
-| HashSet_RemoveAll_Contains |         |      1.222 ms |      0.01 |  161909 B |        1,044.57 |
-| RemoveAll_BinarySearch     |         |      2.205 ms |      0.03 |      90 B |            0.58 |
+| RemoveAll_Contains         | ssc-l   |     87.107 ms |      1.00 |     155 B |            1.00 |
+| HashSet_RemoveAll_Contains | ssc-l   |      1.222 ms |      0.01 |  161909 B |        1,044.57 |
+| RemoveAll_BinarySearch     | ssc-l   |      2.205 ms |      0.03 |      90 B |            0.58 |
 
 #### `RemoveAll_Contains` ⭐
 
