@@ -202,74 +202,63 @@ public List<Customer> HashSet_FindAll_Contains(List<int> ids, List<Customer> cus
 
 ### Exclusive filter
 
-Taking the top two performers (and baseline, `Where_Contains`) for both speed and allocations in all categories. Some cases may have a more performant method but large allocations or vice versa:
+Taking the top two performers (and baseline, `RemoveAll_Contains`) for both speed and allocations in all categories. Some cases may have a more performant method but large allocations or vice versa:
 
+| Method                     | Dataset |          Mean | **Ratio** | Allocated | **Alloc Ratio** |
+| -------------------------- | ------- | ------------: | --------: | --------: | --------------: |
+| RemoveAll_Contains         |         |      9.418 us |      1.00 |      88 B |            1.00 |
+| HashSet_RemoveAll_Contains |         |      5.367 us |      0.57 |    1960 B |           22.27 |
+| RemoveAll_BinarySearch     |         |      9.344 us |      1.00 |      88 B |            1.00 |
+|                            |         |               |           |           |                 |
+| RemoveAll_Contains         |         |     755.26 us |      1.00 |      88 B |            1.00 |
+| HashSet_RemoveAll_Contains |         |      52.25 us |      0.07 |   17896 B |          203.36 |
+| RemoveAll_BinarySearch     |         |     118.02 us |      0.16 |      88 B |            1.00 |
+|                            |         |               |           |           |                 |
+| RemoveAll_Contains         |         |   81,210.8 us |     1.000 |     145 B |            1.00 |
+| HashSet_RemoveAll_Contains |         |      647.3 us |     0.008 |  161909 B |        1,116.61 |
+| RemoveAll_BinarySearch     |         |    1,564.6 us |     0.019 |      89 B |            0.61 |
+|                            |         |               |           |           |                 |
+| RemoveAll_Any              |         |      12.18 ns |      1.05 |      88 B |            1.00 |
+| RemoveAll_Contains         |         |      11.69 ns |      1.00 |      88 B |            1.00 |
+| FindAll_Contains           |         |     947.80 ns |     82.01 |     120 B |            1.36 |
+|                            |         |               |           |           |                 |
+| RemoveAll_Any              |         |      11.54 ns |      0.96 |      88 B |            1.00 |
+| RemoveAll_Contains         |         |      12.01 ns |      1.00 |      88 B |            1.00 |
+| RemoveAll_BinarySearch     |         |  44,010.89 ns |  3,579.00 |      88 B |            1.00 |
+|                            |         |               |           |           |                 |
+| RemoveAll_Any              |         |      14.14 ns |      1.28 |      88 B |            1.00 |
+| RemoveAll_Contains         |         |      11.02 ns |      1.00 |      88 B |            1.00 |
+| RemoveAll_BinarySearch     |         | 493,290.26 ns | 44,890.50 |      88 B |            1.00 |
+|                            |         |               |           |           |                 |
+| RemoveAll_Contains         |         |      9.714 us |      1.00 |      88 B |            1.00 |
+| HashSet_RemoveAll_Contains |         |      5.850 us |      0.60 |    1960 B |           22.27 |
+| RemoveAll_BinarySearch     |         |      9.138 us |      0.94 |      88 B |            1.00 |
+|                            |         |               |           |           |                 |
+| RemoveAll_Contains         |         |     636.78 us |      1.00 |      88 B |            1.00 |
+| HashSet_RemoveAll_Contains |         |      68.90 us |      0.11 |   17896 B |          203.36 |
+| RemoveAll_BinarySearch     |         |     122.05 us |      0.19 |      88 B |            1.00 |
+|                            |         |               |           |           |                 |
+| RemoveAll_Contains         |         |     87.107 ms |      1.00 |     155 B |            1.00 |
+| HashSet_RemoveAll_Contains |         |      1.222 ms |      0.01 |  161909 B |        1,044.57 |
+| RemoveAll_BinarySearch     |         |      2.205 ms |      0.03 |      90 B |            0.58 |
 
-| Method                   | Dataset |       Mean | **Ratio** | Allocated | **Alloc Ratio** |
-| ------------------------ | ------- | ---------: | --------: | --------: | --------------: |
-| Where_Contains           | sc-s    | 110.181 ms |      1.00 | 256.54 KB |            1.00 |
-| HashSet_Where_Contains   | sc-s    |   1.696 ms |      0.02 |  414.5 KB |            1.62 |
-| HashSet_FindAll_Contains | sc-s    |   1.573 ms |      0.01 | 414.43 KB |            1.62 |
-|                          |         |            |           |           |                 |
-| ForEach                  | sc-m    | 725.515 ms |      6.60 |  256.7 KB |            1.00 |
-| HashSet_Where_Contains   | sc-m    |   1.701 ms |      0.02 |  414.5 KB |            1.62 |
-| HashSet_FindAll_Contains | sc-m    |   1.556 ms |      0.01 | 414.43 KB |            1.62 |
-|                          |         |            |           |           |                 |
-| Where_Contains           | sc-l    | 112.457 ms |      1.00 | 256.54 KB |            1.00 |
-| HashSet_Where_Contains   | sc-l    |   1.660 ms |      0.02 |  414.5 KB |            1.62 |
-| HashSet_FindAll_Contains | sc-l    |   1.618 ms |      0.01 | 414.43 KB |            1.62 |
-|                          |         |            |           |           |                 |
-| Where_Contains           | lic-s   | 111.736 ms |      1.00 | 256.54 KB |            1.00 |
-| HashSet_Where_Contains   | lic-s   |   1.726 ms |      0.02 |  414.5 KB |            1.62 |
-| HashSet_FindAll_Contains | lic-s   |   1.607 ms |      0.01 | 414.43 KB |            1.62 |
-|                          |         |            |           |           |                 |
-| Where_Contains           | lic-m   | 110.823 ms |      1.00 | 256.54 KB |            1.00 |
-| HashSet_Where_Contains   | lic-m   |   1.810 ms |      0.02 |  414.5 KB |            1.62 |
-| HashSet_FindAll_Contains | lic-m   |   1.798 ms |      0.02 | 414.43 KB |            1.62 |
-|                          |         |            |           |           |                 |
-| Where_Contains           | lic-l   | 110.460 ms |      1.00 | 256.54 KB |            1.00 |
-| HashSet_Where_Contains   | lic-l   |   1.721 ms |      0.02 |  414.5 KB |            1.62 |
-| HashSet_FindAll_Contains | lic-l   |   1.595 ms |      0.01 | 414.43 KB |            1.62 |
-|                          |         |            |           |           |                 |
-| Where_Contains           | ssc-s   | 110.784 ms |      1.00 | 256.54 KB |            1.00 |
-| HashSet_Where_Contains   | ssc-s   |   1.790 ms |      0.02 |  414.5 KB |            1.62 |
-| HashSet_FindAll_Contains | ssc-s   |   1.579 ms |      0.01 | 414.43 KB |            1.62 |
-|                          |         |            |           |           |                 |
-| Where_Contains           | ssc-m   | 110.806 ms |      1.00 | 256.54 KB |            1.00 |
-| HashSet_Where_Contains   | ssc-m   |   1.758 ms |      0.02 |  414.5 KB |            1.62 |
-| HashSet_FindAll_Contains | ssc-m   |   1.605 ms |      0.01 | 414.43 KB |            1.62 |
-|                          |         |            |           |           |                 |
-| Where_Contains           | ssc-l   | 110.529 ms |      1.00 | 256.54 KB |            1.00 |
-| HashSet_Where_Contains   | ssc-l   |   1.702 ms |      0.02 |  414.5 KB |            1.62 |
-| HashSet_FindAll_Contains | ssc-l   |   1.627 ms |      0.01 | 414.43 KB |            1.62 |
+#### `RemoveAll_Contains` ⭐
 
-#### `Where_Contains` and `FindAll_Contains` ⭐
-
-The baseline and best overall utility. A decent choice for all cases when compared to the other options. `FindAll_Contains` has very similar performance.
+The baseline and best overall utility. A decent choice for all cases when compared to the other options. `RemoveAll_Contains` has very similar performance.
 
 ```csharp
-public List<Customer> Where_Contains(List<int> ids, List<Customer> customers)
+public List<Customer> RemoveAll_Contains(List<int> ids, List<Customer> customers)
 {
-    return customers.Where(c => !ids.Contains(c.Id)).ToList();
-}
-
-public List<Customer> FindAll_Contains(List<int> ids, List<Customer> customers)
-{
-    return customers.FindAll(c => !ids.Contains(c.Id));
+    customers.RemoveAll(c => ids.Contains(c.Id));
+    return customers;
 }
 ```
 
-#### `HashSet_Where_Contains` and `HashSet_FindAll_Contains`
+#### `HashSet_RemoveAll_Contains` 
 
 Always extremely performant when compared to the baseline, often performing the action in ~1% of the baseline time. If you require performance, it's worth looking into how a `HashSet` can improve your scenario.
 
 ```csharp
-public List<Customer> HashSet_Where_Contains(List<int> ids, List<Customer> customers)
-{
-    var idSet = new HashSet<int>(ids);
-    return customers.Where(c => !idSet.Contains(c.Id)).ToList();
-}
-
 public List<Customer> HashSet_RemoveAll_Contains(List<int> ids, List<Customer> customers)
 {
     var idSet = new HashSet<int>(ids);
@@ -279,17 +268,11 @@ public List<Customer> HashSet_RemoveAll_Contains(List<int> ids, List<Customer> c
 }
 ```
 
-#### `Where_BinarySearch` and `FindAll_BinarySearch`
+#### `RemoveAll_BinarySearch` 
 
-Anather extremely performant runner up, often performing the action in ~3% of the baseline up. The advantage this has over the hashset examples is this will often run at the lowest allocations out of all the scenarios tested.
+Anather extremely performant runner up, often performing similar to `HashSet_RemoveAll_Contains` without the allocation.. The advantage this has over the hashset examples is this will often run at the lowest allocations out of all the scenarios tested.
 
 ```csharp
-public List<Customer> Where_BinarySearch(List<int> ids, List<Customer> customers)
-{
-    ids.Sort();
-    return customers.Where(c => ids.BinarySearch(c.Id) < 0).ToList();
-}
-
 public List<Customer> RemoveAll_BinarySearch(List<int> ids, List<Customer> customers)
 {
     ids.Sort();
@@ -301,7 +284,7 @@ public List<Customer> RemoveAll_BinarySearch(List<int> ids, List<Customer> custo
 
 #### Avoid using `.Any()` and Linq `join`
 
-`.Any()` is nearly always the worst performing and is entirely outclasses by using `.Contains()` inside the `Where()` predicate. Linq `join` sometimes does okay, but it's not worth it when easier, more performant and less unusual methods exist.
+`.Any()` is nearly always the worst performing and is entirely outclasses by using `.Contains()` inside the `Where()` predicate. Linq `join` sometimes does okay, but it's not worth it when easier, more performant and less unusual methods exist. While `Any()` turned up in some of the results, outside of proper usage it has extremely poor performance. 
 
 ## References
 
