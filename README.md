@@ -244,7 +244,7 @@ Taking the top two performers (and baseline, `RemoveAll_Contains`) for both spee
 
 #### `RemoveAll_Contains` ⭐
 
-The baseline and best overall utility. A decent choice for all cases when compared to the other options. `RemoveAll_Contains` has very similar performance.
+The baseline and best overall utility. A decent choice for all cases when compared to the other options. `RemoveAll_Contains` has very similar performance. Overall, `RemoveAll()` works very well when paired with a fast way to work out which ID to pick up.
 
 ```csharp
 public List<Customer> RemoveAll_Contains(List<int> ids, List<Customer> customers)
